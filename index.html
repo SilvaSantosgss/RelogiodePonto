@@ -244,7 +244,7 @@
   @media (max-width:720px){
     body{padding:14px 12px calc(100px + env(safe-area-inset-bottom))}
     .card{padding:18px}
-    .topbar{position:sticky;top:0;z-index:45;margin:-14px -12px 16px;
+    .topbar{position:static;margin:-14px -12px 16px;
       border-radius:0 0 20px 20px;box-shadow:0 6px 20px -10px rgba(0,0,0,.35)}
     .brand-sub{display:none}
     .logo{width:40px;height:40px;font-size:19px}
@@ -253,7 +253,9 @@
     .filterbar select{flex:1;min-width:0}
     #scopeLabel{flex-basis:100%;order:3}
     .summary{display:flex;overflow-x:auto;gap:12px;scroll-snap-type:x mandatory;
-      -webkit-overflow-scrolling:touch;padding:2px 0 8px;margin-bottom:14px}
+      -webkit-overflow-scrolling:touch;padding:10px 12px;margin:0 -12px 14px;
+      position:sticky;top:0;z-index:44;background:var(--soft);
+      box-shadow:0 8px 16px -12px rgba(0,0,0,.35)}
     .summary::-webkit-scrollbar{display:none}
     .stat{flex:0 0 76%;scroll-snap-align:start}
     .table-wrap{display:none}
@@ -374,6 +376,21 @@
     .date-range input{flex:1;min-width:0}
     .cl-head .btn.sm{width:100%}
   }
+
+  /* ===== Lista de dias (calendário/fechamento) ===== */
+  .cal-list{display:none;flex-direction:column;gap:8px;margin-top:8px}
+  .cal-list.show{display:flex}
+  .cal-list-title{font-size:12.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin:8px 0 2px}
+  .cl-day{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:11px 14px;cursor:pointer;transition:transform .1s,border-color .15s}
+  .cl-day:hover{border-color:var(--blue)}
+  .cl-day:active{transform:scale(.99)}
+  .cld-left{display:flex;flex-direction:column;line-height:1.3;min-width:0}
+  .cld-date{font-weight:700;font-size:14.5px}
+  .cld-sub{font-size:12.5px;color:var(--text2);overflow:hidden;text-overflow:ellipsis}
+  .cld-bal{font-size:13.5px;font-weight:800;padding:4px 10px;border-radius:999px;white-space:nowrap}
+  .cld-bal.pos{color:var(--green);background:var(--green-soft)}
+  .cld-bal.neg{color:var(--red);background:var(--red-soft)}
+  .cld-bal.none{color:var(--blue);background:var(--blue-soft)}
 </style>
 </head>
 <body>
@@ -421,8 +438,8 @@
 
     <div class="summary">
       <div class="stat" id="balanceCard"><div class="stat-ico ico-balance">⚖️</div><div class="stat-body"><div class="k">Saldo</div><div class="v" id="totBalance">0h 00m</div></div></div>
-      <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k">Total trabalhado</div><div class="v" id="totWorked">0h 00m</div></div></div>
-      <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k">Total previsto</div><div class="v" id="totExpected">0h 00m</div></div></div>
+      <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k">Trabalhado hoje</div><div class="v" id="totWorked">0h 00m</div></div></div>
+      <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k">Previsto hoje</div><div class="v" id="totExpected">0h 00m</div></div></div>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -459,6 +476,7 @@
       <div class="cal-grid" id="calDays"></div>
       <div class="cal-legend"><span><span class="lg pos"></span>Saldo positivo</span><span><span class="lg neg"></span>Saldo negativo</span><span><span class="lg none"></span>Sem registro</span></div>
       <p class="hint">Toque em um dia para ver os horários marcados ou registrar um novo dia.</p>
+      <div class="cal-list" id="calList"></div>
     </div>
   </div>
 
@@ -516,6 +534,23 @@
       </div>
       <div class="card-list" id="closureCards"></div>
       <div class="empty hidden" id="closureEmpty">Nenhum fechamento criado ainda. Crie o primeiro com “Novo fechamento”.</div>
+    </div>
+    <div class="card hidden" id="closureReport" style="margin-top:16px">
+      <div class="cl-head">
+        <div>
+          <div class="section-title">Relatório do fechamento</div>
+          <div class="detail-sub" id="crRange">—</div>
+        </div>
+        <button class="btn secondary sm" id="crBack">← Voltar</button>
+      </div>
+      <div class="summary" style="margin-top:14px">
+        <div class="stat" id="crBalCard"><div class="stat-ico ico-balance">⚖️</div><div class="stat-body"><div class="k">Saldo do período</div><div class="v" id="crBal">0h 00m</div></div></div>
+        <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k">Total trabalhado</div><div class="v" id="crWorked">0h 00m</div></div></div>
+        <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k">Total previsto</div><div class="v" id="crExpected">0h 00m</div></div></div>
+      </div>
+      <div class="section-title" style="margin-bottom:4px">Registros do período</div>
+      <div class="cal-list show" id="crList"></div>
+      <div class="empty hidden" id="crEmpty">Nenhum registro neste período.</div>
     </div>
   </div>
 
@@ -635,6 +670,7 @@
   function fmtSaldoHM(min){return (min<0?'- ':'+ ')+fmtHM(min);}
   function monthLabel(ym){const[y,m]=ym.split('-');return MONTHS[Number(m)-1]+' '+y;}
   function toBR(iso){return iso.split('-').reverse().join('/');}
+  function todayLocalISO(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 
   // ---- cell parsers (robust for xlsx numbers/dates/strings) ----
   function toHM(v){
@@ -762,14 +798,18 @@
       cl.appendChild(card);
     });
     $('emptyState').classList.toggle('hidden',visible.length>0);
-    $('totWorked').textContent=fmt(tw);$('totExpected').textContent=fmt(te);
+    const todayISO=todayLocalISO();
+    const todayRec=records.find(r=>r.data===todayISO);
+    if(todayRec)recalc(todayRec);
+    $('totWorked').textContent=fmt(todayRec?todayRec.workedMin:0);
+    $('totExpected').textContent=fmt(todayRec?todayRec.expectedMin:expectedByWeekday(todayISO));
     const bal=tw-te;$('totBalance').textContent=fmtSigned(bal);
     $('balanceCard').className='stat '+(bal>=0?'pos':'neg');
     $('balanceCard').querySelector('.k').textContent=(f==='all')?'Saldo acumulado':(f==='custom'?'Saldo do período':'Saldo do mês');
     document.querySelectorAll('.del').forEach(b=>b.onclick=(e)=>{e.stopPropagation();records=records.filter(x=>x.data!==b.dataset.d);save();render();});
     if(!$('viewCalendar').classList.contains('hidden'))renderCalendar();
     if(!$('viewSettings').classList.contains('hidden'))renderSettings();
-    if(!$('viewClosures').classList.contains('hidden'))renderClosures();
+    if(!$('viewClosures').classList.contains('hidden')){renderClosures();if(!$('closureReport').classList.contains('hidden'))renderClosureReport();}
   }
   $('filterMonth').onchange=render;
   $('fStart').addEventListener('change',render);
@@ -823,6 +863,32 @@
       cell.addEventListener('click',()=>openDay(ds));
       grid.appendChild(cell);
     }
+    renderCalList(days);
+  }
+  function renderCalList(days){
+    const listEl=$('calList');
+    if(calFilter==='all'){listEl.classList.remove('show');listEl.innerHTML='';return;}
+    const items=[];
+    for(let d=1;d<=days;d++){
+      const ds=calYM+'-'+String(d).padStart(2,'0');
+      const r=records.find(x=>x.data===ds);
+      const kind=r?(recalc(r),r.balanceMin>=0?'pos':'neg'):'none';
+      if(kind!==calFilter)continue;
+      items.push({ds,r,kind});
+    }
+    const labels={pos:'Dias com saldo positivo',neg:'Dias com saldo negativo',none:'Dias sem registro'};
+    listEl.innerHTML=`<div class="cal-list-title">${labels[calFilter]} · ${items.length}</div>`;
+    if(!items.length){const em=document.createElement('div');em.className='empty';em.textContent='Nenhum dia nesta condição neste mês.';listEl.appendChild(em);}
+    items.forEach(({ds,r,kind})=>{
+      const wd=WEEKDAYS_FULL[new Date(ds+'T00:00:00').getDay()];
+      const row=document.createElement('div');row.className='cl-day';
+      const sub=r?(([[r.e1,r.s1],[r.e2,r.s2]].filter(p=>p[0]||p[1]).map(p=>`${p[0]||'—'}–${p[1]||'—'}`).join('  ·  ')||'Sem marcação')+(r.obs?' · '+r.obs:'')):'Toque para registrar os horários';
+      const bal=r?`<span class="cld-bal ${kind}">${fmtSigned(r.balanceMin)}</span>`:'<span class="cld-bal none">Registrar</span>';
+      row.innerHTML=`<span class="cld-left"><span class="cld-date">${toBR(ds)} · ${wd}</span><span class="cld-sub">${sub}</span></span>${bal}`;
+      row.addEventListener('click',()=>openDay(ds));
+      listEl.appendChild(row);
+    });
+    listEl.classList.add('show');
   }
   $('calPrev').onclick=()=>{calYM=shiftYM(calYM||curYM(),-1);renderCalendar();};
   $('calNext').onclick=()=>{calYM=shiftYM(calYM||curYM(),1);renderCalendar();};
@@ -894,10 +960,27 @@
     if(start>end){showMsg($('closureMsg'),'A data inicial deve ser antes da final.','err');return;}
     if(closureKey){const c=closures.find(x=>String(x.id)===String(closureKey));if(c){c.start=start;c.end=end;}}
     else{closures.push({id:Date.now(),start,end});}
-    save().then(()=>{showMsg($('closureMsg'),'Fechamento salvo.','ok');renderClosures();setTimeout(closeClosure,600);}).catch(e=>showMsg($('closureMsg'),e.message,'err'));
+    save().then(()=>{showMsg($('closureMsg'),'Fechamento salvo.','ok');renderClosures();renderClosureReport();setTimeout(closeClosure,600);}).catch(e=>showMsg($('closureMsg'),e.message,'err'));
   };
-  function delClosure(id){if(!confirm('Excluir este fechamento?'))return;closures=closures.filter(x=>String(x.id)!==String(id));save().then(renderClosures);}
-  function viewClosure(id){const c=closures.find(x=>String(x.id)===String(id));if(!c)return;$('filterMonth').value='custom';$('fStart').value=c.start||'';$('fEnd').value=c.end||'';setView('home');render();}
+  function delClosure(id){if(!confirm('Excluir este fechamento?'))return;if(String(viewingClosureId)===String(id))viewingClosureId=null;closures=closures.filter(x=>String(x.id)!==String(id));save().then(()=>{renderClosures();renderClosureReport();});}
+  let viewingClosureId=null;
+  function renderClosureReport(){
+    if(viewingClosureId==null){$('closureReport').classList.add('hidden');return;}
+    const c=closures.find(x=>String(x.id)===String(viewingClosureId));
+    if(!c){viewingClosureId=null;$('closureReport').classList.add('hidden');return;}
+    const s=closureStats(c);
+    $('crRange').textContent=(c.start?toBR(c.start):'—')+' até '+(c.end?toBR(c.end):'—')+' · '+s.count+' registro(s)';
+    $('crBal').textContent=fmtSigned(s.balance);
+    $('crBalCard').className='stat '+(s.balance>=0?'pos':'neg');
+    $('crWorked').textContent=fmt(s.worked);
+    $('crExpected').textContent=fmt(s.expected);
+    const inRange=records.filter(r=>(!c.start||r.data>=c.start)&&(!c.end||r.data<=c.end)).slice().sort((a,b)=>a.data<b.data?1:-1);
+    const el=$('crList');el.innerHTML='';
+    inRange.forEach(r=>{recalc(r);const wd=WEEKDAYS_FULL[new Date(r.data+'T00:00:00').getDay()];const sub=([[r.e1,r.s1],[r.e2,r.s2]].filter(p=>p[0]||p[1]).map(p=>`${p[0]||'—'}–${p[1]||'—'}`).join('  ·  ')||'Sem marcação')+(r.obs?' · '+r.obs:'');const row=document.createElement('div');row.className='cl-day';row.innerHTML=`<span class="cld-left"><span class="cld-date">${toBR(r.data)} · ${wd}</span><span class="cld-sub">${sub}</span></span><span class="cld-bal ${r.balanceMin>=0?'pos':'neg'}">${fmtSigned(r.balanceMin)}</span>`;row.addEventListener('click',()=>openDetail(r.data));el.appendChild(row);});
+    $('crEmpty').classList.toggle('hidden',inRange.length>0);
+  }
+  function viewClosure(id){viewingClosureId=id;renderClosureReport();$('closureReport').classList.remove('hidden');$('closureReport').scrollIntoView({behavior:'smooth',block:'start'});}
+  $('crBack').onclick=()=>{viewingClosureId=null;$('closureReport').classList.add('hidden');};
   $('setResetPw').onclick=()=>{
     if(!auth||!auth.currentUser)return;
     auth.sendPasswordResetEmail(auth.currentUser.email)
