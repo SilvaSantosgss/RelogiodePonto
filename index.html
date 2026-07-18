@@ -235,6 +235,44 @@
   .detail-stats b{font-size:19px;font-weight:800}
   .btn.danger{background:var(--canvas);color:var(--red);border:1px solid var(--red);box-shadow:none}
   .btn.danger:hover{background:var(--red-soft);filter:none}
+  .card-list{display:none}
+
+  /* ===== MOBILE (cara de app) ===== */
+  @media (max-width:720px){
+    body{padding:14px 12px calc(100px + env(safe-area-inset-bottom))}
+    .card{padding:18px}
+    .topbar{position:sticky;top:0;z-index:45;margin:-14px -12px 16px;
+      border-radius:0 0 20px 20px;box-shadow:0 6px 20px -10px rgba(0,0,0,.35)}
+    .brand-sub{display:none}
+    .logo{width:40px;height:40px;font-size:19px}
+    h1{font-size:19px}
+    .filterbar{gap:8px;flex-wrap:wrap}
+    .filterbar select{flex:1;min-width:0}
+    #scopeLabel{flex-basis:100%;order:3}
+    .summary{display:flex;overflow-x:auto;gap:12px;scroll-snap-type:x mandatory;
+      -webkit-overflow-scrolling:touch;padding:2px 0 8px;margin-bottom:14px}
+    .summary::-webkit-scrollbar{display:none}
+    .stat{flex:0 0 76%;scroll-snap-align:start}
+    .table-wrap{display:none}
+    .card-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+    .rec-card{background:var(--soft);border:1px solid var(--border);border-radius:16px;
+      padding:14px 15px;cursor:pointer;transition:transform .1s,box-shadow .15s}
+    .rec-card:active{transform:scale(.985);box-shadow:var(--shadow-sm)}
+    .rc-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .rc-day{display:flex;flex-direction:column;line-height:1.25}
+    .rc-wd{font-size:11.5px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .rc-date{font-size:16.5px;font-weight:700;letter-spacing:-.01em}
+    .rc-bal{font-size:15px;font-weight:800;padding:5px 11px;border-radius:999px;white-space:nowrap}
+    .rc-bal.pos{color:var(--green);background:var(--green-soft)}
+    .rc-bal.neg{color:var(--red);background:var(--red-soft)}
+    .rc-times{margin-top:9px;font-size:14.5px;color:var(--text);font-variant-numeric:tabular-nums}
+    .rc-foot{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px;align-items:center}
+    .rc-chip{font-size:12.5px;color:var(--text2);background:var(--canvas);border:1px solid var(--border);border-radius:999px;padding:4px 11px}
+    .rc-chip b{color:var(--text);font-weight:700}
+    .section-title{font-size:15.5px}
+    .fab-container{bottom:calc(16px + env(safe-area-inset-bottom))}
+    .modal{border-radius:20px}
+  }
 </style>
 </head>
 <body>
@@ -308,6 +346,7 @@
         <tbody id="rows"></tbody>
       </table>
     </div>
+    <div class="card-list" id="cardList"></div>
     <div class="empty hidden" id="emptyState">Nenhum registro neste período.</div>
   </div>
 
@@ -472,7 +511,7 @@
     const f=$('filterMonth').value;
     const visible=records.filter(r=>f==='all'||r.data.slice(0,7)===f);
     $('scopeLabel').textContent=f==='all'?`${records.length} registro(s) no total`:`${visible.length} registro(s) em ${monthLabel(f)}`;
-    const tb=$('rows');tb.innerHTML='';let tw=0,te=0;
+    const tb=$('rows');tb.innerHTML='';const cl=$('cardList');cl.innerHTML='';let tw=0,te=0;
     visible.forEach(r=>{
       recalc(r);tw+=r.workedMin;te+=r.expectedMin;
       const wd=WEEKDAYS[new Date(r.data+'T00:00:00').getDay()];const bal=r.balanceMin;
@@ -485,6 +524,14 @@
         `<td><button class="del" data-d="${r.data}">Excluir</button></td>`;
       tr.addEventListener('click',()=>openDetail(r.data));
       tb.appendChild(tr);
+      const shifts=[[r.e1,r.s1],[r.e2,r.s2]].filter(p=>p[0]||p[1]).map(p=>`${p[0]||'—'}–${p[1]||'—'}`).join('   ·   ')||'Sem marcação';
+      const card=document.createElement('div');
+      card.className='rec-card';
+      card.innerHTML=`<div class="rc-top"><div class="rc-day"><span class="rc-wd">${wd}</span><span class="rc-date">${toBR(r.data)}</span></div><span class="rc-bal ${bal>=0?'pos':'neg'}">${fmtSigned(bal)}</span></div>`+
+        `<div class="rc-times">${shifts}</div>`+
+        `<div class="rc-foot"><span class="rc-chip">Trab. <b>${fmt(r.workedMin)}</b></span><span class="rc-chip">Prev. <b>${fmt(r.expectedMin)}</b></span>${r.obs?`<span class="tag">${r.obs}</span>`:''}</div>`;
+      card.addEventListener('click',()=>openDetail(r.data));
+      cl.appendChild(card);
     });
     $('emptyState').classList.toggle('hidden',visible.length>0);
     $('totWorked').textContent=fmt(tw);$('totExpected').textContent=fmt(te);
