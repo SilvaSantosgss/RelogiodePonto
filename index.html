@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PontoTracker</title>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0f11;
+    --surface: #16181c;
+    --surface2: #1e2026;
+    --border: #2a2d35;
+    --accent: #c8f135;
+    --accent2: #3af0a2;
+    --danger: #f1354b;
+    --warn: #f1a535;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --font-display: 'Syne', sans-serif;
+    --font-mono: 'Space Mono', monospace;
+    --radius: 8px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-display);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  /* ─── AUTH SCREEN ─── */
+  #auth-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(200,241,53,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 10% 80%, rgba(58,240,162,0.04) 0%, transparent 70%),
+      var(--bg);
+  }
+  .auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 36px;
+    box-shadow: var(--shadow);
+    animation: fadeUp 0.5s ease;
+  }
+  .auth-logo {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .auth-title {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .auth-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+    font-family: var(--font-mono);
+  }
+  .auth-tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--bg);
+    border-radius: var(--radius);
+    padding: 4px;
+    margin-bottom: 28px;
+  }
+  .auth-tab {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .auth-tab.active {
+    background: var(--accent);
+    color: #0e0f11;
+  }
+  .form-group { margin-bottom: 18px; }
+  .form-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 7px;
+  }
+  .form-input {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--accent); }
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #0e0f11;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn-primary:hover { opacity: 0.88; }
+  .btn-primary:active { transform: scale(0.98); }
+  .auth-note {
+    margin-top: 20px;
+    padding: 12px 14px;
+    background: rgba(200,241,53,0.05);
+    border: 1px solid rgba(200,241,53,0.15);
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .auth-note span { color: var(--accent); }
+  .auth-error {
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: rgba(241,53,75,0.1);
+    border: 1px solid rgba(241,53,75,0.3);
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-family: var(--font-mono);
+    color: var(--danger);
+    display: none;
+  }
+
+  /* ─── MAIN APP ─── */
+  #app-screen { display: none; min-height: 100vh; }
+
+  /* HEADER */
+  .app-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(14,15,17,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+  .header-brand {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand-dot {
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .brand-name {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--text);
+  }
+  .header-user {
+    display: flex; align-items: center; gap: 16px;
+  }
+  .user-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 14px 6px 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+  }
+  .user-avatar {
+    width: 24px; height: 24px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #0e0f11;
+  }
+  .btn-logout {
+    padding: 7px 14px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+
+  /* MAIN LAYOUT */
+  .app-main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .card-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-title {
+    font-size: 13px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text);
+  }
+  .card-badge {
+    padding: 3px 10px;
+    background: rgba(200,241,53,0.1);
+    border: 1px solid rgba(200,241,53,0.2);
+    border-radius: 100px;
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--accent);
+  }
+  .card-body { padding: 24px; }
+
+  /* REGISTER FORM */
+  .date-display {
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: var(--bg);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+  .date-day {
+    font-size: 42px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--accent);
+    font-family: var(--font-mono);
+  }
+  .date-info {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    margin-top: 4px;
+  }
+  .time-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+  .time-field { display: flex; flex-direction: column; gap: 7px; }
+  .time-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+  .time-input-wrap { position: relative; }
+  .time-input {
+    width: 100%;
+    padding: 11px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .time-input:focus { border-color: var(--accent); }
+  .form-date-input {
+    width: 100%;
+    padding: 11px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 20px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .form-date-input:focus { border-color: var(--accent); }
+  .lunch-warning {
+    padding: 10px 12px;
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    margin-bottom: 14px;
+    display: none;
+  }
+  .lunch-warning.show { display: block; }
+  .lunch-warning.ok { background: rgba(58,240,162,0.07); border: 1px solid rgba(58,240,162,0.2); color: var(--accent2); }
+  .lunch-warning.warn { background: rgba(241,165,53,0.07); border: 1px solid rgba(241,165,53,0.2); color: var(--warn); }
+  .lunch-warning.err { background: rgba(241,53,75,0.07); border: 1px solid rgba(241,53,75,0.2); color: var(--danger); }
+  .day-total {
+    padding: 14px;
+    background: var(--surface2);
+    border-radius: var(--radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .day-total-label { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+  .day-total-value {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .day-total-diff { font-size: 12px; font-family: var(--font-mono); }
+  .pos { color: var(--accent2); }
+  .neg { color: var(--danger); }
+  .zero { color: var(--muted); }
+  .btn-register {
+    width: 100%;
+    padding: 14px;
+    background: var(--accent);
+    color: #0e0f11;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-bottom: 10px;
+  }
+  .btn-register:hover { opacity: 0.88; }
+  .btn-register:active { transform: scale(0.98); }
+  .btn-delete {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid rgba(241,53,75,0.3);
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: none;
+  }
+  .btn-delete.show { display: block; }
+  .btn-delete:hover { background: rgba(241,53,75,0.08); border-color: var(--danger); }
+
+  /* RIGHT COLUMN */
+  .right-column { display: flex; flex-direction: column; gap: 24px; }
+
+  /* SUMMARY CARDS */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .summary-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+  }
+  .summary-value {
+    font-family: var(--font-mono);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .summary-desc {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+
+  /* FILTERS */
+  .filters-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .filter-input {
+    padding: 9px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+  .filter-input:focus { border-color: var(--accent); }
+  .filter-sep { color: var(--muted); font-family: var(--font-mono); font-size: 13px; }
+  .btn-filter {
+    padding: 9px 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-filter:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-filter.active { background: rgba(200,241,53,0.1); border-color: var(--accent); color: var(--accent); }
+  .filter-shortcuts { display: flex; gap: 6px; flex-wrap: wrap; }
+
+  /* RECORDS TABLE */
+  .records-table { width: 100%; border-collapse: collapse; }
+  .records-table th {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .records-table td {
+    padding: 14px 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    border-bottom: 1px solid rgba(42,45,53,0.5);
+    vertical-align: middle;
+  }
+  .records-table tr:last-child td { border-bottom: none; }
+  .records-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .record-date-main { font-weight: 700; font-size: 14px; }
+  .record-date-week { font-size: 11px; color: var(--muted); }
+  .time-chip {
+    display: inline-block;
+    padding: 3px 8px;
+    background: var(--surface2);
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .time-chip.missing { color: var(--muted); background: transparent; }
+  .diff-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .diff-badge.pos { background: rgba(58,240,162,0.1); color: var(--accent2); }
+  .diff-badge.neg { background: rgba(241,53,75,0.1); color: var(--danger); }
+  .diff-badge.zero { background: rgba(107,114,128,0.1); color: var(--muted); }
+  .saturday-row td { background: rgba(200,241,53,0.02); }
+  .empty-state {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+  .empty-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    opacity: 0.3;
+    font-family: monospace;
+  }
+
+  /* SYNC SECTION */
+  .sync-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .sync-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .sync-title {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .sync-status {
+    display: flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent2);
+  }
+  .sync-dot { width: 6px; height: 6px; background: var(--accent2); border-radius: 50%; animation: pulse 2s infinite; }
+  .sync-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-sm {
+    padding: 8px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-sm:hover { border-color: var(--accent); color: var(--accent); }
+  .sync-info { font-family: var(--font-mono); font-size: 11px; color: var(--muted); margin-top: 8px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 14px 20px;
+    border-radius: var(--radius);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    display: flex; align-items: center; gap: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 9999;
+    max-width: 340px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: #1a2e1a; border: 1px solid rgba(58,240,162,0.3); color: var(--accent2); }
+  .toast.error { background: #2e1a1a; border: 1px solid rgba(241,53,75,0.3); color: var(--danger); }
+  .toast.info { background: var(--surface2); border: 1px solid var(--border); color: var(--text); }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+  .modal-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%; max-width: 460px;
+    transform: scale(0.95);
+    transition: transform 0.2s;
+  }
+  .modal-overlay.show .modal-box { transform: scale(1); }
+  .modal-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .modal-sub { font-size: 13px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 20px; }
+  .modal-code {
+    width: 100%;
+    padding: 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    word-break: break-all;
+    margin-bottom: 16px;
+    white-space: pre-wrap;
+  }
+  .modal-actions { display: flex; gap: 10px; }
+  .btn-secondary {
+    flex: 1; padding: 12px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--muted); }
+  .modal-input {
+    width: 100%;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .modal-input:focus { border-color: var(--accent); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* MOBILE */
+  @media (max-width: 900px) {
+    .app-main {
+      grid-template-columns: 1fr;
+      padding: 16px;
+      gap: 16px;
+    }
+    .summary-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .summary-value { font-size: 20px; }
+    .summary-card { padding: 14px; }
+    .records-table th:nth-child(4),
+    .records-table td:nth-child(4) { display: none; }
+  }
+  @media (max-width: 600px) {
+    .app-header { padding: 0 16px; }
+    .brand-name { font-size: 12px; }
+    .user-chip { display: none; }
+    .summary-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .summary-value { font-size: 18px; }
+    .summary-label { font-size: 9px; }
+    .summary-card { padding: 12px; }
+    .filters-row { gap: 8px; }
+    .filter-input { font-size: 12px; padding: 8px 10px; }
+    .records-table th, .records-table td { padding: 10px 10px; }
+    .records-table th:nth-child(3),
+    .records-table td:nth-child(3) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── AUTH SCREEN ─── -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-logo">PontoTracker v1.1</div>
+    <h1 class="auth-title">Controle de Ponto</h1>
+    <p class="auth-sub">// registro e gestao de horas</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Entrar</button>
+      <button class="auth-tab" onclick="switchTab('register')">Criar Conta</button>
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <div id="login-form">
+      <div class="form-group">
+        <label class="form-label">Usuario</label>
+        <input type="text" class="form-input" id="login-user" placeholder="seu_usuario" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <input type="password" class="form-input" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="btn-primary" onclick="doLogin()">Acessar Sistema</button>
+    </div>
+    <div id="register-form" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Nome</label>
+        <input type="text" class="form-input" id="reg-name" placeholder="Seu Nome">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Usuario</label>
+        <input type="text" class="form-input" id="reg-user" placeholder="seu_usuario" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Senha</label>
+        <input type="password" class="form-input" id="reg-pass" placeholder="Min. 4 caracteres" autocomplete="new-password">
+      </div>
+      <button class="btn-primary" onclick="doRegister()">Criar Conta</button>
+    </div>
+    <div class="auth-note">
+      <span>SYNC:</span> Os dados ficam no navegador. Use <span>Exportar/Importar</span> para sincronizar entre dispositivos.
+    </div>
+  </div>
+</div>
+
+<!-- ─── APP SCREEN ─── -->
+<div id="app-screen">
+  <header class="app-header">
+    <div class="header-brand">
+      <div class="brand-dot"></div>
+      <span class="brand-name">PONTO_TRACKER</span>
+    </div>
+    <div class="header-user">
+      <div class="user-chip">
+        <div class="user-avatar" id="header-avatar">U</div>
+        <span id="header-username">Usuario</span>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Sair</button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- LEFT: REGISTER FORM -->
+    <div>
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Registrar Ponto</span>
+          <span class="card-badge" id="form-day-badge">--</span>
+        </div>
+        <div class="card-body">
+          <div>
+            <label class="form-label" style="margin-bottom:7px;display:block">Data do Registro</label>
+            <input type="date" class="form-date-input" id="form-date" onchange="onDateChange()">
+          </div>
+          <div class="date-display">
+            <div class="date-day" id="date-day-num">--</div>
+            <div class="date-info" id="date-day-info">Selecione uma data</div>
+          </div>
+
+          <div class="time-grid">
+            <div class="time-field">
+              <span class="time-label">Entrada</span>
+              <input type="time" class="time-input" id="t-entrada" oninput="recalcDay()">
+            </div>
+            <div class="time-field">
+              <span class="time-label">Saida Almoco</span>
+              <input type="time" class="time-input" id="t-saida-almoco" oninput="recalcDay()">
+            </div>
+            <div class="time-field">
+              <span class="time-label">Retorno Almoco</span>
+              <input type="time" class="time-input" id="t-retorno-almoco" oninput="recalcDay()">
+            </div>
+            <div class="time-field">
+              <span class="time-label">Saida</span>
+              <input type="time" class="time-input" id="t-saida" oninput="recalcDay()">
+            </div>
+          </div>
+
+          <div class="lunch-warning" id="lunch-warning"></div>
+
+          <div class="day-total">
+            <div>
+              <div class="day-total-label">Total Trabalhado</div>
+              <div class="day-total-diff" id="day-diff-label"></div>
+            </div>
+            <div>
+              <div class="day-total-value" id="day-total-val">--:--</div>
+              <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted);text-align:right" id="day-meta-label"></div>
+            </div>
+          </div>
+
+          <button class="btn-register" onclick="saveRecord()">Salvar Registro</button>
+          <button class="btn-delete show" id="btn-delete" onclick="deleteRecord()" style="display:none">Excluir este dia</button>
+        </div>
+      </div>
+
+      <!-- SYNC -->
+      <div class="sync-section" style="margin-top:16px">
+        <div class="sync-header">
+          <span class="sync-title">Sincronizacao</span>
+          <div class="sync-status"><div class="sync-dot"></div>Local</div>
+        </div>
+        <div class="sync-row">
+          <button class="btn-sm" onclick="openExport()">Exportar Dados</button>
+          <button class="btn-sm" onclick="openImport()">Importar Dados</button>
+          <button class="btn-sm" onclick="openXlsxImport()">Importar XLSX</button>
+          <input type="file" id="xlsx-import-input" accept=".xlsx,.xls" style="display:none" onchange="handleXlsxImport(event)">
+        </div>
+        <div class="sync-info">Use exportar/importar para sincronizar entre dispositivos ou carregar um relatorio em XLSX.</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: RECORDS -->
+    <div class="right-column">
+      <!-- SUMMARY -->
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-label">Saldo Total</div>
+          <div class="summary-value" id="sum-saldo">0:00</div>
+          <div class="summary-desc">acumulado</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Dias Reg.</div>
+          <div class="summary-value" id="sum-dias" style="color:var(--accent)">0</div>
+          <div class="summary-desc">no periodo</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Horas Trabalhadas</div>
+          <div class="summary-value" id="sum-horas">0h</div>
+          <div class="summary-desc">no periodo</div>
+        </div>
+      </div>
+
+      <!-- FILTERS + TABLE -->
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Historico de Registros</span>
+          <span class="card-badge" id="records-count-badge">0 dias</span>
+        </div>
+        <div class="card-body" style="padding-bottom:0">
+          <div class="filters-row" style="margin-bottom:16px">
+            <input type="date" class="filter-input" id="filter-start" onchange="renderTable()">
+            <span class="filter-sep">ate</span>
+            <input type="date" class="filter-input" id="filter-end" onchange="renderTable()">
+            <div class="filter-shortcuts">
+              <button class="btn-filter" onclick="setFilterShortcut('week')">Semana</button>
+              <button class="btn-filter" onclick="setFilterShortcut('month')">Mes</button>
+              <button class="btn-filter" onclick="setFilterShortcut('all')">Tudo</button>
+            </div>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="records-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Entrada / Saida</th>
+                <th>Almoco</th>
+                <th>Horas</th>
+                <th>Saldo do Dia</th>
+              </tr>
+            </thead>
+            <tbody id="records-tbody">
+              <tr><td colspan="5"><div class="empty-state"><div class="empty-icon">[ ]</div>Nenhum registro encontrado</div></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- EXPORT MODAL -->
+<div class="modal-overlay" id="export-modal">
+  <div class="modal-box">
+    <div class="modal-title">Exportar Dados</div>
+    <div class="modal-sub">// copie o codigo abaixo para importar em outro dispositivo</div>
+    <div class="modal-code" id="export-code"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('export-modal')">Fechar</button>
+      <button class="btn-primary" style="flex:1" onclick="copyExportCode()">Copiar Codigo</button>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT MODAL -->
+<div class="modal-overlay" id="import-modal">
+  <div class="modal-box">
+    <div class="modal-title">Importar Dados</div>
+    <div class="modal-sub">// cole o codigo exportado de outro dispositivo</div>
+    <textarea class="modal-input" id="import-code" rows="5" placeholder="Cole o codigo de exportacao aqui..."></textarea>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('import-modal')">Cancelar</button>
+      <button class="btn-primary" style="flex:1" onclick="doImport()">Importar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── STORAGE KEY HELPERS ───
+function userKey(username, suffix) {
+  return `pt_${username}_${suffix}`;
+}
+
+// ─── USERS DB ───
+function getUsers() {
+  return JSON.parse(localStorage.getItem('pt_users') || '{}');
+}
+function saveUsers(u) {
+  localStorage.setItem('pt_users', JSON.stringify(u));
+}
+
+// ─── CURRENT USER ───
+let currentUser = null;
+
+function getCurrentUser() {
+  return JSON.parse(sessionStorage.getItem('pt_current') || 'null');
+}
+function setCurrentUser(u) {
+  sessionStorage.setItem('pt_current', JSON.stringify(u));
+  currentUser = u;
+}
+
+// ─── RECORDS ───
+function getRecords() {
+  if (!currentUser) return {};
+  return JSON.parse(localStorage.getItem(userKey(currentUser.username, 'records')) || '{}');
+}
+function saveRecords(r) {
+  if (!currentUser) return;
+  localStorage.setItem(userKey(currentUser.username, 'records'), JSON.stringify(r));
+}
+
+// ─── AUTH ───
+let authMode = 'login';
+function switchTab(mode) {
+  authMode = mode;
+  document.querySelectorAll('.auth-tab').forEach((t,i) => {
+    t.classList.toggle('active', (i===0 && mode==='login') || (i===1 && mode==='register'));
+  });
+  document.getElementById('login-form').style.display = mode === 'login' ? 'block' : 'none';
+  document.getElementById('register-form').style.display = mode === 'register' ? 'block' : 'none';
+  document.getElementById('auth-error').style.display = 'none';
+}
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function doLogin() {
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value;
+  if (!user || !pass) return showAuthError('Preencha todos os campos.');
+  const users = getUsers();
+  if (!users[user]) return showAuthError('Usuario nao encontrado.');
+  if (users[user].pass !== btoa(pass)) return showAuthError('Senha incorreta.');
+  setCurrentUser({ username: user, name: users[user].name });
+  initApp();
+}
+function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const user = document.getElementById('reg-user').value.trim().toLowerCase();
+  const pass = document.getElementById('reg-pass').value;
+  if (!name || !user || !pass) return showAuthError('Preencha todos os campos.');
+  if (pass.length < 4) return showAuthError('Senha muito curta (min. 4 caracteres).');
+  if (!/^[a-z0-9_]+$/.test(user)) return showAuthError('Usuario: apenas letras, numeros e _');
+  const users = getUsers();
+  if (users[user]) return showAuthError('Usuario ja existe.');
+  users[user] = { name, pass: btoa(pass) };
+  saveUsers(users);
+  setCurrentUser({ username: user, name });
+  initApp();
+}
+function doLogout() {
+  sessionStorage.removeItem('pt_current');
+  currentUser = null;
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+}
+
+// ─── INIT APP ───
+function initApp() {
+  currentUser = getCurrentUser();
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'block';
+  document.getElementById('header-username').textContent = currentUser.name;
+  document.getElementById('header-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+  // set today
+  const today = todayStr();
+  document.getElementById('form-date').value = today;
+  setFilterShortcut('month');
+  onDateChange();
+  renderSummary();
+}
+
+function todayStr() {
+  return new Date().toISOString().split('T')[0];
+}
+
+// ─── DATE UTILS ───
+function parseTime(str) {
+  if (!str) return null;
+  const [h, m] = str.split(':').map(Number);
+  return h * 60 + m;
+}
+function formatMins(mins) {
+  if (mins === null || mins === undefined || isNaN(mins)) return '--:--';
+  const sign = mins < 0 ? '-' : '';
+  const abs = Math.abs(mins);
+  const h = Math.floor(abs / 60);
+  const m = abs % 60;
+  return `${sign}${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+function getDayOfWeek(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return d.getDay(); // 0=Sun,1=Mon,...,6=Sat
+}
+function isSaturday(dateStr) { return getDayOfWeek(dateStr) === 6; }
+function isWeekday(dateStr) {
+  const d = getDayOfWeek(dateStr);
+  return d >= 1 && d <= 5;
+}
+const DIAS = ['Domingo','Segunda-feira','Terca-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sabado'];
+const MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+function formatDatePretty(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  return `${d.getDate()} ${MESES[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+// ─── REQUIRED HOURS ───
+function getRequired(dateStr) {
+  if (isSaturday(dateStr)) return 4 * 60;   // 240 min
+  if (isWeekday(dateStr)) return 8 * 60;    // 480 min
+  return null; // Sunday
+}
+
+// ─── CALC DAY FROM FORM ───
+function calcDayFromInputs(entrada, saidaAlmoco, retornoAlmoco, saida, dateStr) {
+  if (!entrada || !saida) return { total: null, lunch: null, err: null };
+
+  const e = parseTime(entrada);
+  const s = parseTime(saida);
+  let total = s - e;
+
+  let lunch = null;
+  let lunchErr = null;
+
+  if (saidaAlmoco && retornoAlmoco) {
+    lunch = parseTime(retornoAlmoco) - parseTime(saidaAlmoco);
+    if (!isSaturday(dateStr)) {
+      if (lunch < 60) lunchErr = 'ALERTA: Almoco menor que 1h (minimo exigido)';
+      else if (lunch > 90) lunchErr = 'AVISO: Almoco maior que 1h30 (maximo permitido)';
+      else lunchErr = null;
+    }
+    total = total - lunch;
+  } else if (!isSaturday(dateStr) && entrada && saida) {
+    // no lunch registered on weekday - deduce minimum
+  }
+
+  return { total, lunch, lunchErr };
+}
+
+function recalcDay() {
+  const dateStr = document.getElementById('form-date').value;
+  if (!dateStr) return;
+
+  const entrada = document.getElementById('t-entrada').value;
+  const saidaAlmoco = document.getElementById('t-saida-almoco').value;
+  const retornoAlmoco = document.getElementById('t-retorno-almoco').value;
+  const saida = document.getElementById('t-saida').value;
+
+  const { total, lunch, lunchErr } = calcDayFromInputs(entrada, saidaAlmoco, retornoAlmoco, saida, dateStr);
+
+  const lunchWarn = document.getElementById('lunch-warning');
+  lunchWarn.className = 'lunch-warning';
+  if (lunchErr) {
+    lunchWarn.textContent = lunchErr;
+    lunchWarn.classList.add('show', lunchErr.startsWith('ALERTA') ? 'err' : 'warn');
+  } else if (lunch !== null && !isSaturday(dateStr)) {
+    lunchWarn.textContent = 'Almoco dentro do limite (' + formatMins(lunch) + ')';
+    lunchWarn.classList.add('show', 'ok');
+  }
+
+  const required = getRequired(dateStr);
+  const totalEl = document.getElementById('day-total-val');
+  const diffEl = document.getElementById('day-diff-label');
+  const metaEl = document.getElementById('day-meta-label');
+
+  if (total !== null) {
+    totalEl.textContent = formatMins(total);
+    if (required !== null) {
+      const diff = total - required;
+      diffEl.textContent = (diff >= 0 ? '+' : '') + formatMins(diff);
+      diffEl.className = 'day-total-diff ' + (diff > 0 ? 'pos' : diff < 0 ? 'neg' : 'zero');
+      metaEl.textContent = 'meta: ' + formatMins(required);
+    }
+  } else {
+    totalEl.textContent = '--:--';
+    diffEl.textContent = '';
+    metaEl.textContent = '';
+  }
+}
+
+function onDateChange() {
+  const dateStr = document.getElementById('form-date').value;
+  if (!dateStr) return;
+
+  const dow = getDayOfWeek(dateStr);
+  const dayName = DIAS[dow];
+  const dateNum = new Date(dateStr + 'T12:00:00').getDate();
+
+  document.getElementById('date-day-num').textContent = String(dateNum).padStart(2,'0');
+  document.getElementById('date-day-info').textContent = dayName + ' — ' + formatDatePretty(dateStr);
+  document.getElementById('form-day-badge').textContent = isSaturday(dateStr) ? 'Sabado (4h)' : isWeekday(dateStr) ? 'Dia Util (8h)' : 'Domingo';
+
+  // Check if record exists
+  const records = getRecords();
+  const rec = records[dateStr];
+  if (rec) {
+    document.getElementById('t-entrada').value = rec.entrada || '';
+    document.getElementById('t-saida-almoco').value = rec.saidaAlmoco || '';
+    document.getElementById('t-retorno-almoco').value = rec.retornoAlmoco || '';
+    document.getElementById('t-saida').value = rec.saida || '';
+    document.getElementById('btn-delete').style.display = 'block';
+  } else {
+    document.getElementById('t-entrada').value = '';
+    document.getElementById('t-saida-almoco').value = '';
+    document.getElementById('t-retorno-almoco').value = '';
+    document.getElementById('t-saida').value = '';
+    document.getElementById('btn-delete').style.display = 'none';
+  }
+  recalcDay();
+}
+
+function saveRecord() {
+  const dateStr = document.getElementById('form-date').value;
+  if (!dateStr) return showToast('Selecione uma data.', 'error');
+
+  const dow = getDayOfWeek(dateStr);
+  if (dow === 0) return showToast('Domingo nao e dia de trabalho.', 'error');
+
+  const entrada = document.getElementById('t-entrada').value;
+  const saidaAlmoco = document.getElementById('t-saida-almoco').value;
+  const retornoAlmoco = document.getElementById('t-retorno-almoco').value;
+  const saida = document.getElementById('t-saida').value;
+
+  if (!entrada || !saida) return showToast('Informe ao menos Entrada e Saida.', 'error');
+
+  const { total, lunch } = calcDayFromInputs(entrada, saidaAlmoco, retornoAlmoco, saida, dateStr);
+  const required = getRequired(dateStr);
+
+  const records = getRecords();
+  records[dateStr] = { entrada, saidaAlmoco, retornoAlmoco, saida, total, lunch, required };
+  saveRecords(records);
+
+  showToast('Registro salvo com sucesso!', 'success');
+  document.getElementById('btn-delete').style.display = 'block';
+  renderTable();
+  renderSummary();
+}
+
+function deleteRecord() {
+  const dateStr = document.getElementById('form-date').value;
+  if (!dateStr) return;
+  const records = getRecords();
+  delete records[dateStr];
+  saveRecords(records);
+  onDateChange();
+  renderTable();
+  renderSummary();
+  showToast('Registro excluido.', 'info');
+}
+
+// ─── FILTERS ───
+function setFilterShortcut(type) {
+  const now = new Date();
+  let start, end;
+  if (type === 'week') {
+    const day = now.getDay();
+    const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+    start = new Date(now.setDate(diff));
+    end = new Date(); end.setDate(start.getDate() + 6);
+    now.setDate(new Date().getDate()); // reset
+  } else if (type === 'month') {
+    start = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+    end = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+  } else {
+    document.getElementById('filter-start').value = '';
+    document.getElementById('filter-end').value = '';
+    renderTable();
+    return;
+  }
+  document.getElementById('filter-start').value = start.toISOString().split('T')[0];
+  document.getElementById('filter-end').value = end.toISOString().split('T')[0];
+  renderTable();
+}
+
+// ─── RENDER TABLE ───
+function renderTable() {
+  const records = getRecords();
+  const filterStart = document.getElementById('filter-start').value;
+  const filterEnd = document.getElementById('filter-end').value;
+
+  let keys = Object.keys(records).sort((a,b) => b.localeCompare(a));
+
+  if (filterStart) keys = keys.filter(k => k >= filterStart);
+  if (filterEnd) keys = keys.filter(k => k <= filterEnd);
+
+  const tbody = document.getElementById('records-tbody');
+  document.getElementById('records-count-badge').textContent = keys.length + ' dia' + (keys.length !== 1 ? 's' : '');
+
+  if (keys.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="empty-icon">[ ]</div>Nenhum registro no periodo selecionado</div></td></tr>';
+    renderSummaryFiltered(keys, records);
+    return;
+  }
+
+  tbody.innerHTML = keys.map(dateStr => {
+    const rec = records[dateStr];
+    const dow = getDayOfWeek(dateStr);
+    const isSat = dow === 6;
+    const diff = rec.total !== null && rec.required ? rec.total - rec.required : null;
+    const diffClass = diff === null ? 'zero' : diff > 0 ? 'pos' : diff < 0 ? 'neg' : 'zero';
+    const diffSign = diff > 0 ? '+' : '';
+    const lunchStr = rec.lunch ? formatMins(rec.lunch) : '<span class="time-chip missing">--</span>';
+
+    return `<tr class="${isSat ? 'saturday-row' : ''}" onclick="loadDate('${dateStr}')" style="cursor:pointer">
+      <td>
+        <div class="record-date-main">${formatDatePretty(dateStr)}</div>
+        <div class="record-date-week">${DIAS[dow]}${isSat ? ' (4h)' : ''}</div>
+      </td>
+      <td>
+        <span class="time-chip">${rec.entrada || '--'}</span>
+        <span style="color:var(--muted);font-size:11px;margin:0 4px">-&gt;</span>
+        <span class="time-chip">${rec.saida || '--'}</span>
+      </td>
+      <td>${lunchStr}</td>
+      <td><span class="time-chip">${formatMins(rec.total)}</span></td>
+      <td><span class="diff-badge ${diffClass}">${diff !== null ? diffSign + formatMins(diff) : '--'}</span></td>
+    </tr>`;
+  }).join('');
+
+  renderSummaryFiltered(keys, records);
+}
+
+function loadDate(dateStr) {
+  document.getElementById('form-date').value = dateStr;
+  onDateChange();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ─── SUMMARY ───
+function renderSummary() {
+  renderTable();
+}
+
+function renderSummaryFiltered(keys, records) {
+  let totalMins = 0;
+  let saldoMins = 0;
+  let dias = 0;
+
+  keys.forEach(k => {
+    const rec = records[k];
+    if (rec.total !== null && rec.total !== undefined) {
+      totalMins += rec.total;
+      dias++;
+    }
+    if (rec.total !== null && rec.required) {
+      saldoMins += (rec.total - rec.required);
+    }
+  });
+
+  const saldoEl = document.getElementById('sum-saldo');
+  saldoEl.textContent = (saldoMins >= 0 ? '+' : '') + formatMins(saldoMins);
+  saldoEl.className = 'summary-value ' + (saldoMins > 0 ? 'pos' : saldoMins < 0 ? 'neg' : 'zero');
+
+  document.getElementById('sum-dias').textContent = dias;
+  const horas = Math.floor(totalMins / 60);
+  document.getElementById('sum-horas').textContent = horas + 'h';
+}
+
+// ─── SYNC: EXPORT / IMPORT ───
+function openExport() {
+  const records = getRecords();
+  const payload = JSON.stringify({ user: currentUser.username, records });
+  const encoded = btoa(unescape(encodeURIComponent(payload)));
+  document.getElementById('export-code').textContent = encoded;
+  document.getElementById('export-modal').classList.add('show');
+}
+function copyExportCode() {
+  const code = document.getElementById('export-code').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    showToast('Codigo copiado para a area de transferencia!', 'success');
+    closeModal('export-modal');
+  }).catch(() => {
+    showToast('Copie o codigo manualmente.', 'info');
+  });
+}
+function openImport() {
+  document.getElementById('import-code').value = '';
+  document.getElementById('import-modal').classList.add('show');
+}
+function doImport() {
+  const code = document.getElementById('import-code').value.trim();
+  if (!code) return showToast('Cole o codigo de exportacao.', 'error');
+  try {
+    const decoded = JSON.parse(decodeURIComponent(escape(atob(code))));
+    if (!decoded.records) throw new Error('Formato invalido');
+    const existing = getRecords();
+    const merged = Object.assign({}, existing, decoded.records);
+    saveRecords(merged);
+    closeModal('import-modal');
+    renderTable();
+    renderSummary();
+    const count = Object.keys(decoded.records).length;
+    showToast(`${count} registros importados com sucesso!`, 'success');
+  } catch(e) {
+    showToast('Codigo invalido. Verifique e tente novamente.', 'error');
+  }
+}
+
+// ─── XLSX REPORT IMPORT ───
+function openXlsxImport() {
+  const input = document.getElementById('xlsx-import-input');
+  input.value = '';
+  input.click();
+}
+
+function normalizeHeader(value) {
+  return String(value || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function excelDateToISO(value) {
+  if (value === null || value === undefined || value === '') return '';
+  if (value instanceof Date && !isNaN(value)) return value.toISOString().split('T')[0];
+  if (typeof value === 'number') {
+    const d = XLSX.SSF.parse_date_code(value);
+    if (d) return `${String(d.y).padStart(4,'0')}-${String(d.m).padStart(2,'0')}-${String(d.d).padStart(2,'0')}`;
+  }
+  const raw = String(value).trim();
+  const br = raw.match(/^(\d{1,2})[\/\-.](\d{1,2})[\/\-.](\d{2,4})$/);
+  if (br) {
+    const y = br[3].length === 2 ? '20' + br[3] : br[3];
+    return `${y}-${br[2].padStart(2,'0')}-${br[1].padStart(2,'0')}`;
+  }
+  const iso = raw.match(/^(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})/);
+  if (iso) return `${iso[1]}-${iso[2].padStart(2,'0')}-${iso[3].padStart(2,'0')}`;
+  const parsed = new Date(raw);
+  return isNaN(parsed) ? '' : parsed.toISOString().split('T')[0];
+}
+
+function normalizeTime(value) {
+  if (value === null || value === undefined || value === '') return '';
+  if (value instanceof Date && !isNaN(value)) return `${String(value.getHours()).padStart(2,'0')}:${String(value.getMinutes()).padStart(2,'0')}`;
+  if (typeof value === 'number') {
+    const totalMinutes = Math.round((value % 1) * 24 * 60);
+    const h = Math.floor(totalMinutes / 60) % 24;
+    const m = totalMinutes % 60;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+  }
+  const raw = String(value).trim();
+  const match = raw.match(/(\d{1,2})[:hH](\d{2})/);
+  if (!match) return '';
+  return `${match[1].padStart(2,'0')}:${match[2]}`;
+}
+
+function pickValue(row, aliases) {
+  const normalized = Object.entries(row).map(([key, value]) => [normalizeHeader(key), value]);
+  for (const alias of aliases.map(normalizeHeader)) {
+    const found = normalized.find(([key]) => key === alias || key.includes(alias));
+    if (found) return found[1];
+  }
+  return '';
+}
+
+function rowToRecord(row) {
+  const dateStr = excelDateToISO(pickValue(row, ['data', 'dia', 'date']));
+  if (!dateStr) return null;
+  const entrada = normalizeTime(pickValue(row, ['entrada', 'entrada manha', 'inicio', 'início']));
+  const saidaAlmoco = normalizeTime(pickValue(row, ['saida almoco', 'saída almoço', 'saida para almoco', 'intervalo inicio', 'inicio almoco']));
+  const retornoAlmoco = normalizeTime(pickValue(row, ['retorno almoco', 'retorno almoço', 'volta almoco', 'intervalo fim', 'fim almoco']));
+  const saida = normalizeTime(pickValue(row, ['saida', 'saída', 'saida final', 'fim', 'termino', 'término']));
+  if (!entrada && !saidaAlmoco && !retornoAlmoco && !saida) return null;
+  const { total, lunch } = calcDayFromInputs(entrada, saidaAlmoco, retornoAlmoco, saida, dateStr);
+  return {
+    dateStr,
+    record: { entrada, saidaAlmoco, retornoAlmoco, saida, total, lunch, required: getRequired(dateStr) }
+  };
+}
+
+function handleXlsxImport(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (!window.XLSX) return showToast('Biblioteca XLSX nao carregou. Verifique a internet e tente novamente.', 'error');
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const workbook = XLSX.read(new Uint8Array(e.target.result), { type: 'array', cellDates: true });
+      let imported = {};
+      let skipped = 0;
+
+      workbook.SheetNames.forEach(name => {
+        const sheet = workbook.Sheets[name];
+        const rows = XLSX.utils.sheet_to_json(sheet, { defval: '', raw: true });
+        rows.forEach(row => {
+          const parsed = rowToRecord(row);
+          if (parsed) imported[parsed.dateStr] = parsed.record;
+          else skipped++;
+        });
+      });
+
+      const count = Object.keys(imported).length;
+      if (!count) return showToast('Nenhum registro valido encontrado no XLSX.', 'error');
+      const existing = getRecords();
+      saveRecords(Object.assign({}, existing, imported));
+      renderTable();
+      renderSummary();
+      showToast(`${count} registros importados do XLSX!`, 'success');
+      if (skipped) console.info(`${skipped} linhas ignoradas no XLSX.`);
+    } catch (err) {
+      console.error(err);
+      showToast('Nao foi possivel ler o XLSX.', 'error');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// ─── TOAST ───
+function showToast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.className = `toast ${type}`;
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ─── INIT ───
+window.addEventListener('load', () => {
+  const stored = getCurrentUser();
+  if (stored) {
+    currentUser = stored;
+    initApp();
+  }
+  // keyboard enter on auth
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (authMode === 'login' && document.getElementById('auth-screen').style.display !== 'none') doLogin();
+    }
+  });
+  // close modals on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    el.addEventListener('click', e => {
+      if (e.target === el) closeModal(el.id);
+    });
+  });
+});
+</script>
+</body>
+</html>
