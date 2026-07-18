@@ -296,7 +296,7 @@
   .cal-cell:not(.empty):hover{border-color:var(--blue)}
   .cal-cell:active{transform:scale(.97)}
   .cal-d{font-size:13px;font-weight:700}
-  .cal-b{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+  .cal-b{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;line-height:1}
   .cal-cell.pos{background:var(--green-soft)} .cal-cell.pos .cal-b{color:var(--green)}
   .cal-cell.neg{background:var(--red-soft)} .cal-cell.neg .cal-b{color:var(--red)}
   .cal-legend{display:flex;gap:16px;align-items:center;margin-top:14px;font-size:12.5px;color:var(--text2);flex-wrap:wrap}
@@ -325,10 +325,11 @@
     .bn-add{flex:0 0 auto;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;color:#fff;font-size:30px;line-height:1;background:var(--grad-brand);box-shadow:0 10px 22px -8px rgba(99,102,241,.7);margin-top:-24px}
     .bn-add:active{transform:scale(.95)}
     body{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
-    .cal-cell{min-height:52px;border-radius:10px;padding:4px 5px}
-    .cal-d{font-size:12px}
-    .cal-b{font-size:10px}
-    .cal-grid,.cal-dow{gap:4px}
+    .cal-cell{min-height:0;aspect-ratio:1/1;border-radius:9px;padding:2px;align-items:center;justify-content:center;gap:2px}
+    .cal-d{font-size:13px}
+    .cal-b{font-size:9px;letter-spacing:-.2px}
+    .cal-grid,.cal-dow{gap:3px}
+    .cal-dow span{font-size:9.5px}
   }
   @media (prefers-color-scheme:dark){
     .bottomnav{background:rgba(28,28,27,.78)}
@@ -682,6 +683,7 @@
     if(r){openDetail(ds);}
     else{$('fData').value=ds;$('fE1').value='';$('fS1').value='';$('fE2').value='';$('fS2').value='';$('fObs').value='';openSheet();}
   }
+  function fmtCal(min){const s=min<0?'\u2212':'+';const a=Math.abs(min);const h=Math.floor(a/60),m=a%60;return s+(h?(m?h+'h'+m:h+'h'):m+'m');}
   function renderCalendar(){
     const f=$('filterMonth').value;
     if(!calYM)calYM=(f&&f!=='all')?f:curYM();
@@ -695,7 +697,7 @@
       const r=records.find(x=>x.data===ds);
       const cell=document.createElement('button');
       cell.className='cal-cell'+(r?(recalc(r),r.balanceMin>=0?' pos':' neg'):'');
-      cell.innerHTML=`<span class="cal-d">${d}</span>`+(r?`<span class="cal-b">${fmtSigned(r.balanceMin)}</span>`:'');
+      cell.innerHTML=`<span class="cal-d">${d}</span>`+(r?`<span class="cal-b">${fmtCal(r.balanceMin)}</span>`:'');
       cell.addEventListener('click',()=>openDay(ds));
       grid.appendChild(cell);
     }
