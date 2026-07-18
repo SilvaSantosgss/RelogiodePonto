@@ -337,6 +337,43 @@
   @media (prefers-color-scheme:dark){
     .bottomnav{background:rgba(28,28,27,.78)}
   }
+
+  /* ===== Filtro de período (Home) ===== */
+  .date-range{display:inline-flex;align-items:center;gap:8px}
+  .date-range input{width:auto}
+  .dr-sep{color:var(--text2);font-size:13px}
+
+  /* ===== Filtros do calendário ===== */
+  .cal-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .cf{padding:6px 13px;border-radius:999px;border:1px solid var(--border);background:var(--canvas);color:var(--text2);font-weight:600;font-size:13px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .cf:hover{background:var(--soft)}
+  .cf.active{background:var(--grad-blue);color:#fff;border-color:transparent}
+  .cal-cell.dim{opacity:.28;filter:grayscale(.3)}
+
+  /* ===== Jornada ===== */
+  .journey-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px;margin-top:14px}
+  .jr-day{display:flex;flex-direction:column;align-items:center;gap:6px}
+  .jr-day span{font-size:11.5px;font-weight:700;color:var(--text2);text-transform:uppercase}
+  .jr-day input{width:100%;text-align:center;padding:9px 4px}
+
+  /* ===== Fechamentos ===== */
+  .cl-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+  .cl-actions{display:inline-flex;gap:6px;flex-wrap:wrap}
+  .cl-actions .btn,.cl-card .cc-actions .btn{min-height:auto;padding:6px 10px;font-size:12.5px}
+  .cl-card{background:var(--soft);border:1px solid var(--border);border-radius:16px;padding:14px 15px}
+  .cl-card .cc-top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .cl-card .cc-range{font-size:15px;font-weight:700}
+  .cl-card .cc-bal{font-size:14.5px;font-weight:800;padding:4px 10px;border-radius:999px;white-space:nowrap}
+  .cc-bal.pos{color:var(--green);background:var(--green-soft)} .cc-bal.neg{color:var(--red);background:var(--red-soft)}
+  .cl-card .cc-meta{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+  .cl-card .cc-actions{display:flex;gap:8px;flex-wrap:wrap}
+
+  @media (max-width:720px){
+    .journey-grid{grid-template-columns:repeat(4,1fr)}
+    .date-range{width:100%;order:3}
+    .date-range input{flex:1;min-width:0}
+    .cl-head .btn.sm{width:100%}
+  }
 </style>
 </head>
 <body>
@@ -366,6 +403,7 @@
   <div class="viewnav">
     <button class="vn-item active" data-nav="home">🏠 Home</button>
     <button class="vn-item" data-nav="calendar">📅 Calendário</button>
+    <button class="vn-item" data-nav="closures">🧾 Fechamentos</button>
     <button class="vn-item" data-nav="settings">⚙️ Configurações</button>
     <button class="vn-add" id="navAdd">＋ Registrar dia</button>
   </div>
@@ -373,15 +411,18 @@
   <!-- SEÇÃO: HOME -->
   <div class="mview" id="viewHome" data-view="home">
     <div class="filterbar">
-      <label for="filterMonth">Filtrar por mês:</label>
+      <label for="filterMonth">Filtrar:</label>
       <select id="filterMonth"><option value="all">Todos os meses</option></select>
+      <span class="date-range hidden" id="customRange">
+        <input type="date" id="fStart"><span class="dr-sep">até</span><input type="date" id="fEnd">
+      </span>
       <span class="scope" id="scopeLabel"></span>
     </div>
 
     <div class="summary">
+      <div class="stat" id="balanceCard"><div class="stat-ico ico-balance">⚖️</div><div class="stat-body"><div class="k">Saldo</div><div class="v" id="totBalance">0h 00m</div></div></div>
       <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k">Total trabalhado</div><div class="v" id="totWorked">0h 00m</div></div></div>
       <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k">Total previsto</div><div class="v" id="totExpected">0h 00m</div></div></div>
-      <div class="stat" id="balanceCard"><div class="stat-ico ico-balance">⚖️</div><div class="stat-body"><div class="k">Saldo</div><div class="v" id="totBalance">0h 00m</div></div></div>
     </div>
 
     <div class="card" style="margin-top:16px">
@@ -408,6 +449,12 @@
         <div class="cal-title" id="calTitle">—</div>
         <button class="cal-nav" id="calNext" aria-label="Próximo mês">›</button>
       </div>
+      <div class="cal-filters">
+        <button class="cf active" data-cf="all">Todos</button>
+        <button class="cf" data-cf="pos">Positivo</button>
+        <button class="cf" data-cf="neg">Negativo</button>
+        <button class="cf" data-cf="none">Sem registro</button>
+      </div>
       <div class="cal-dow"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
       <div class="cal-grid" id="calDays"></div>
       <div class="cal-legend"><span><span class="lg pos"></span>Saldo positivo</span><span><span class="lg neg"></span>Saldo negativo</span><span><span class="lg none"></span>Sem registro</span></div>
@@ -426,9 +473,16 @@
       </div>
     </div>
     <div class="card set-group">
+      <div class="section-title">Jornada de trabalho</div>
+      <p class="hint" style="margin-top:2px">Defina quantas horas são previstas para cada dia da semana.</p>
+      <div class="journey-grid" id="journeyGrid"></div>
+      <div class="set-actions"><button class="btn sm" id="saveJourney">Salvar jornada</button></div>
+      <div class="msg" id="journeyMsg"></div>
+    </div>
+    <div class="card set-group">
       <div class="section-title">Site</div>
       <div class="set-row"><span>Endereço</span><a class="set-link" href="https://silvasantosgss.github.io/pontocloud/" target="_blank" rel="noopener">Abrir site ↗</a></div>
-      <div class="set-row"><span>Jornada padrão</span><b>Seg–Sex 8h · Sáb 4h · Dom 0h</b></div>
+      <div class="set-row"><span>Jornada atual</span><b id="journeySummary">—</b></div>
       <p class="hint">Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas no dia.</p>
     </div>
     <div class="card set-group">
@@ -439,6 +493,29 @@
         <label class="btn secondary sm" for="importInput" style="display:inline-flex;align-items:center">Importar xlsx</label>
       </div>
       <p class="hint" id="setReportInfo"></p>
+    </div>
+  </div>
+
+  <!-- SEÇÃO: FECHAMENTOS -->
+  <div class="mview hidden" id="viewClosures" data-view="closures">
+    <div class="card">
+      <div class="cl-head">
+        <div>
+          <div class="section-title">Fechamentos</div>
+          <div class="detail-sub">Visualize os períodos em que você fechou seus horários</div>
+        </div>
+        <button class="btn sm" id="newClosureBtn">＋ Novo fechamento</button>
+      </div>
+      <div class="table-wrap">
+        <table id="closureTable">
+          <thead><tr>
+            <th>Data Inicial</th><th>Data Final</th><th>Total de registros</th><th>Total trabalhado</th><th>Saldo de horas</th><th>Ações</th>
+          </tr></thead>
+          <tbody id="closureRows"></tbody>
+        </table>
+      </div>
+      <div class="card-list" id="closureCards"></div>
+      <div class="empty hidden" id="closureEmpty">Nenhum fechamento criado ainda. Crie o primeiro com “Novo fechamento”.</div>
     </div>
   </div>
 
@@ -460,7 +537,7 @@
         <div class="field" style="grid-column:1/-1"><label for="fObs">Observações</label><input type="text" id="fObs" placeholder="Ex.: Feriado"></div>
       </div>
       <button class="btn full" id="addBtn">Adicionar / Atualizar</button>
-      <p class="hint">Jornada prevista: Seg–Sex 8h, Sáb 4h, Dom 0h. Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas. Data existente é atualizada.</p>
+      <p class="hint">A jornada prevista segue o que você definiu em Configurações. Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas. Data existente é atualizada.</p>
       <div class="msg" id="appMsg"></div>
     </div>
   </div>
@@ -492,11 +569,33 @@
     </div>
   </div>
 
+  <!-- POP-UP: novo/editar fechamento -->
+  <div class="modal-backdrop" id="closureBackdrop">
+    <div class="modal card" role="dialog" aria-modal="true">
+      <div class="sheet-head">
+        <div class="section-title" id="closureModalTitle">Novo fechamento</div>
+        <button class="link" id="closureClose">Fechar</button>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label for="clStart">Data inicial</label><input type="date" id="clStart"></div>
+        <div class="field"><label for="clEnd">Data final</label><input type="date" id="clEnd"></div>
+      </div>
+      <div class="detail-stats" id="closurePreview">
+        <div><span>Registros</span><b id="clRegs">0</b></div>
+        <div><span>Trabalhado</span><b id="clWorked">0h 00m</b></div>
+        <div><span>Saldo</span><b id="clBalance">0h 00m</b></div>
+      </div>
+      <button class="btn full" id="clSave">Salvar fechamento</button>
+      <div class="msg" id="closureMsg"></div>
+    </div>
+  </div>
+
   <!-- BARRA INFERIOR (mobile) -->
   <nav class="bottomnav" id="bottomNav">
     <button class="bn-item active" data-nav="home"><span class="bn-ico">🏠</span><span class="bn-lbl">Home</span></button>
     <button class="bn-item" data-nav="calendar"><span class="bn-ico">📅</span><span class="bn-lbl">Calendário</span></button>
     <button class="bn-add" id="bnAdd" aria-label="Registrar dia">＋</button>
+    <button class="bn-item" data-nav="closures"><span class="bn-ico">🧾</span><span class="bn-lbl">Fecham.</span></button>
     <button class="bn-item" data-nav="settings"><span class="bn-ico">⚙️</span><span class="bn-lbl">Config.</span></button>
   </nav>
 </div>
@@ -525,7 +624,9 @@
   function showMsg(el,t,type){el.textContent=t;el.className='msg '+type;setTimeout(()=>{el.className='msg';},4000);}
 
   function isHoliday(obs){return /feriad|folga|férias|ferias|atestado/i.test(obs||'');}
-  function expectedByWeekday(dateStr){const wd=new Date(dateStr+'T00:00:00').getDay();if(wd===0)return 0;if(wd===6)return 240;return 480;}
+  const DEFAULT_JOURNEY=[0,480,480,480,480,480,240];
+  let journey=DEFAULT_JOURNEY.slice();
+  function expectedByWeekday(dateStr){const wd=new Date(dateStr+'T00:00:00').getDay();const v=journey&&journey[wd];return (typeof v==='number'&&!isNaN(v))?v:DEFAULT_JOURNEY[wd];}
   function timeToMin(t){if(!t)return null;const[p,q]=String(t).split(':').map(Number);if(isNaN(p)||isNaN(q))return null;return p*60+q;}
   function shiftMin(a,b){const x=timeToMin(a),y=timeToMin(b);if(x==null||y==null)return 0;let d=y-x;if(d<0)d+=1440;return d>0?d:0;}
   function fmt(min){const s=min<0?'-':'';const m=Math.abs(Math.round(min));return s+Math.floor(m/60)+'h '+String(m%60).padStart(2,'0')+'m';}
@@ -550,7 +651,7 @@
     return s.slice(0,10);
   }
 
-  let auth,db,records=[];
+  let auth,db,records=[],closures=[];
   try{
     firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();
     // Em embeds (iframe), navegadores podem bloquear o armazenamento e o login
@@ -598,7 +699,7 @@
   $('logoutBtn').onclick=()=>auth&&auth.signOut();
 
   function docRef(){return db.collection('userContent').doc(auth.currentUser.uid);}
-  function save(){return docRef().set({records,updated:Date.now()});}
+  function save(){return docRef().set({records,journey,closures,updated:Date.now()});}
 
   function recalc(r){
     r.workedMin=shiftMin(r.e1,r.s1)+shiftMin(r.e2,r.s2);
@@ -616,8 +717,8 @@
   function populateFilter(){
     const sel=$('filterMonth');const cur=sel.value;
     const months=[...new Set(records.map(r=>r.data.slice(0,7)))].sort().reverse();
-    sel.innerHTML='<option value="all">Todos os meses</option>'+months.map(m=>`<option value="${m}">${monthLabel(m)}</option>`).join('');
-    if(cur&&(cur==='all'||months.includes(cur)))sel.value=cur;
+    sel.innerHTML='<option value="all">Todos os meses</option>'+months.map(m=>`<option value="${m}">${monthLabel(m)}</option>`).join('')+'<option value="custom">Período personalizado</option>';
+    if(cur&&(cur==='all'||cur==='custom'||months.includes(cur)))sel.value=cur;
   }
 
   function render(){
@@ -625,8 +726,19 @@
     records.sort((a,b)=>a.data<b.data?1:-1);
     populateFilter();
     const f=$('filterMonth').value;
-    const visible=records.filter(r=>f==='all'||r.data.slice(0,7)===f);
-    $('scopeLabel').textContent=f==='all'?`${records.length} registro(s) no total`:`${visible.length} registro(s) em ${monthLabel(f)}`;
+    $('customRange').classList.toggle('hidden',f!=='custom');
+    let visible;
+    if(f==='custom'){
+      const s=$('fStart').value, e=$('fEnd').value;
+      visible=records.filter(r=>(!s||r.data>=s)&&(!e||r.data<=e));
+      $('scopeLabel').textContent=(s||e)?`${visible.length} registro(s) de ${s?toBR(s):'início'} até ${e?toBR(e):'hoje'}`:'Escolha as datas do período';
+    }else if(f==='all'){
+      visible=records.slice();
+      $('scopeLabel').textContent=`${records.length} registro(s) no total`;
+    }else{
+      visible=records.filter(r=>r.data.slice(0,7)===f);
+      $('scopeLabel').textContent=`${visible.length} registro(s) em ${monthLabel(f)}`;
+    }
     const tb=$('rows');tb.innerHTML='';const cl=$('cardList');cl.innerHTML='';let tw=0,te=0;
     visible.forEach(r=>{
       recalc(r);tw+=r.workedMin;te+=r.expectedMin;
@@ -653,12 +765,15 @@
     $('totWorked').textContent=fmt(tw);$('totExpected').textContent=fmt(te);
     const bal=tw-te;$('totBalance').textContent=fmtSigned(bal);
     $('balanceCard').className='stat '+(bal>=0?'pos':'neg');
-    $('balanceCard').querySelector('.k').textContent=(f==='all')?'Saldo acumulado':'Saldo do mês';
+    $('balanceCard').querySelector('.k').textContent=(f==='all')?'Saldo acumulado':(f==='custom'?'Saldo do período':'Saldo do mês');
     document.querySelectorAll('.del').forEach(b=>b.onclick=(e)=>{e.stopPropagation();records=records.filter(x=>x.data!==b.dataset.d);save();render();});
     if(!$('viewCalendar').classList.contains('hidden'))renderCalendar();
     if(!$('viewSettings').classList.contains('hidden'))renderSettings();
+    if(!$('viewClosures').classList.contains('hidden'))renderClosures();
   }
   $('filterMonth').onchange=render;
+  $('fStart').addEventListener('change',render);
+  $('fEnd').addEventListener('change',render);
 
   function openSheet(){if(!$('fData').value)$('fData').value=new Date().toISOString().slice(0,10);$('formBackdrop').classList.add('open');}
   function closeSheet(){$('formBackdrop').classList.remove('open');}
@@ -671,6 +786,7 @@
     document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active', b.dataset.nav===name));
     if(name==='calendar')renderCalendar();
     if(name==='settings')renderSettings();
+    if(name==='closures')renderClosures();
     window.scrollTo(0,0);
   }
   document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.nav)));
@@ -687,9 +803,10 @@
     else{$('fData').value=ds;$('fE1').value='';$('fS1').value='';$('fE2').value='';$('fS2').value='';$('fObs').value='';openSheet();}
   }
   function fmtCal(min){const s=min<0?'\u2212':'+';const a=Math.abs(min);const h=Math.floor(a/60),m=a%60;return s+(h?(m?h+'h'+m:h+'h'):m+'m');}
+  let calFilter='all';
   function renderCalendar(){
     const f=$('filterMonth').value;
-    if(!calYM)calYM=(f&&f!=='all')?f:curYM();
+    if(!calYM)calYM=(f&&/^\d{4}-\d{2}$/.test(f))?f:curYM();
     const[y,m]=calYM.split('-').map(Number);
     $('calTitle').textContent=MONTHS[m-1]+' '+y;
     const first=new Date(y,m-1,1).getDay(), days=new Date(y,m,0).getDate();
@@ -698,8 +815,10 @@
     for(let d=1;d<=days;d++){
       const ds=calYM+'-'+String(d).padStart(2,'0');
       const r=records.find(x=>x.data===ds);
+      const kind=r?(recalc(r),r.balanceMin>=0?'pos':'neg'):'none';
+      const match=calFilter==='all'||calFilter===kind;
       const cell=document.createElement('button');
-      cell.className='cal-cell'+(r?(recalc(r),r.balanceMin>=0?' pos':' neg'):'');
+      cell.className='cal-cell'+(r?' '+kind:'')+(match?'':' dim');
       cell.innerHTML=`<span class="cal-d">${d}</span>`+(r?`<span class="cal-b">${fmtCal(r.balanceMin)}</span>`:'');
       cell.addEventListener('click',()=>openDay(ds));
       grid.appendChild(cell);
@@ -707,15 +826,78 @@
   }
   $('calPrev').onclick=()=>{calYM=shiftYM(calYM||curYM(),-1);renderCalendar();};
   $('calNext').onclick=()=>{calYM=shiftYM(calYM||curYM(),1);renderCalendar();};
+  document.querySelectorAll('.cf').forEach(b=>b.addEventListener('click',()=>{
+    calFilter=b.dataset.cf;
+    document.querySelectorAll('.cf').forEach(x=>x.classList.toggle('active',x===b));
+    renderCalendar();
+  }));
 
   // ---- Configurações ----
+  function fmtJ(v){const hh=Math.floor(v/60),mm=v%60;return mm?hh+'h'+String(mm).padStart(2,'0'):hh+'h';}
+  function journeyText(){const wk=journey[1];const allWk=[1,2,3,4,5].every(i=>journey[i]===wk);const p=[];p.push(allWk?('Seg–Sex '+fmtJ(wk)):(WEEKDAYS.slice(1,6).map((n,i)=>n+' '+fmtJ(journey[i+1])).join(' · ')));p.push('Sáb '+fmtJ(journey[6]));p.push('Dom '+fmtJ(journey[0]));return p.join(' · ');}
+  function buildJourneyGrid(){const order=[1,2,3,4,5,6,0];$('journeyGrid').innerHTML=order.map(i=>`<div class="jr-day"><span>${WEEKDAYS[i]}</span><input type="number" min="0" max="24" step="0.5" data-wd="${i}" value="${journey[i]/60}"></div>`).join('');}
   function renderSettings(){
     if(auth&&auth.currentUser)$('setEmail').textContent=auth.currentUser.email;
+    buildJourneyGrid();
+    $('journeySummary').textContent=journeyText();
     let tw=0,te=0;records.forEach(r=>{recalc(r);tw+=r.workedMin;te+=r.expectedMin;});
     $('setBalance').textContent=fmtSigned(tw-te);
     $('setBalance').style.color=(tw-te)>=0?'var(--green)':'var(--red)';
     $('setReportInfo').textContent=records.length+' registro(s) · '+fmt(tw)+' trabalhadas · '+fmt(te)+' previstas.';
   }
+  $('saveJourney').onclick=()=>{
+    const nj=journey.slice();
+    document.querySelectorAll('#journeyGrid input').forEach(inp=>{let h=parseFloat(inp.value);if(isNaN(h)||h<0)h=0;if(h>24)h=24;nj[Number(inp.dataset.wd)]=Math.round(h*60);});
+    journey=nj;records.forEach(recalc);
+    save().then(()=>{showMsg($('journeyMsg'),'Jornada salva.','ok');render();$('journeySummary').textContent=journeyText();}).catch(e=>showMsg($('journeyMsg'),e.message,'err'));
+  };
+
+  // ---- Fechamentos ----
+  function closureStats(c){
+    const inRange=records.filter(r=>(!c.start||r.data>=c.start)&&(!c.end||r.data<=c.end));
+    let tw=0,te=0;inRange.forEach(r=>{recalc(r);tw+=r.workedMin;te+=r.expectedMin;});
+    return {count:inRange.length,worked:tw,expected:te,balance:tw-te};
+  }
+  function renderClosures(){
+    const list=closures.slice().sort((a,b)=>(a.start||'')<(b.start||'')?1:-1);
+    const tb=$('closureRows');tb.innerHTML='';const cc=$('closureCards');cc.innerHTML='';
+    list.forEach(c=>{
+      const s=closureStats(c);
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${c.start?toBR(c.start):'—'}</td><td>${c.end?toBR(c.end):'—'}</td><td>${s.count}</td><td>${fmtHM(s.worked)}</td>`+
+        `<td class="${s.balance>=0?'pos':'neg'}">${fmtSaldoHM(s.balance)}</td>`+
+        `<td><span class="cl-actions"><button class="btn sm" data-view-cl="${c.id}">Visualizar</button><button class="btn secondary sm" data-edit-cl="${c.id}">Editar</button><button class="btn danger sm" data-del-cl="${c.id}">Excluir</button></span></td>`;
+      tb.appendChild(tr);
+      const card=document.createElement('div');card.className='cl-card';
+      card.innerHTML=`<div class="cc-top"><span class="cc-range">${c.start?toBR(c.start):'—'} → ${c.end?toBR(c.end):'—'}</span><span class="cc-bal ${s.balance>=0?'pos':'neg'}">${fmtSaldoHM(s.balance)}</span></div>`+
+        `<div class="cc-meta"><span class="rc-chip">${s.count} reg.</span><span class="rc-chip">Trab. <b>${fmtHM(s.worked)}</b></span></div>`+
+        `<div class="cc-actions"><button class="btn sm" data-view-cl="${c.id}">Visualizar</button><button class="btn secondary sm" data-edit-cl="${c.id}">Editar</button><button class="btn danger sm" data-del-cl="${c.id}">Excluir</button></div>`;
+      cc.appendChild(card);
+    });
+    $('closureEmpty').classList.toggle('hidden',list.length>0);
+    document.querySelectorAll('[data-view-cl]').forEach(b=>b.onclick=()=>viewClosure(b.dataset.viewCl));
+    document.querySelectorAll('[data-edit-cl]').forEach(b=>b.onclick=()=>editClosure(b.dataset.editCl));
+    document.querySelectorAll('[data-del-cl]').forEach(b=>b.onclick=()=>delClosure(b.dataset.delCl));
+  }
+  let closureKey=null;
+  function openClosure(){closureKey=null;$('closureModalTitle').textContent='Novo fechamento';$('clStart').value='';$('clEnd').value='';updateClosurePreview();$('closureBackdrop').classList.add('open');}
+  function editClosure(id){const c=closures.find(x=>String(x.id)===String(id));if(!c)return;closureKey=c.id;$('closureModalTitle').textContent='Editar fechamento';$('clStart').value=c.start||'';$('clEnd').value=c.end||'';updateClosurePreview();$('closureBackdrop').classList.add('open');}
+  function closeClosure(){$('closureBackdrop').classList.remove('open');closureKey=null;}
+  function updateClosurePreview(){const s=closureStats({start:$('clStart').value,end:$('clEnd').value});$('clRegs').textContent=s.count;$('clWorked').textContent=fmtHM(s.worked);$('clBalance').textContent=fmtSaldoHM(s.balance);$('clBalance').style.color=s.balance>=0?'var(--green)':'var(--red)';}
+  ['clStart','clEnd'].forEach(id=>$(id).addEventListener('change',updateClosurePreview));
+  $('newClosureBtn').onclick=openClosure;
+  $('closureClose').onclick=closeClosure;
+  $('closureBackdrop').addEventListener('click',e=>{if(e.target===$('closureBackdrop'))closeClosure();});
+  $('clSave').onclick=()=>{
+    const start=$('clStart').value,end=$('clEnd').value;
+    if(!start||!end){showMsg($('closureMsg'),'Escolha as datas inicial e final.','err');return;}
+    if(start>end){showMsg($('closureMsg'),'A data inicial deve ser antes da final.','err');return;}
+    if(closureKey){const c=closures.find(x=>String(x.id)===String(closureKey));if(c){c.start=start;c.end=end;}}
+    else{closures.push({id:Date.now(),start,end});}
+    save().then(()=>{showMsg($('closureMsg'),'Fechamento salvo.','ok');renderClosures();setTimeout(closeClosure,600);}).catch(e=>showMsg($('closureMsg'),e.message,'err'));
+  };
+  function delClosure(id){if(!confirm('Excluir este fechamento?'))return;closures=closures.filter(x=>String(x.id)!==String(id));save().then(renderClosures);}
+  function viewClosure(id){const c=closures.find(x=>String(x.id)===String(id));if(!c)return;$('filterMonth').value='custom';$('fStart').value=c.start||'';$('fEnd').value=c.end||'';setView('home');render();}
   $('setResetPw').onclick=()=>{
     if(!auth||!auth.currentUser)return;
     auth.sendPasswordResetEmail(auth.currentUser.email)
@@ -817,7 +999,7 @@
         authView.classList.add('hidden');appView.classList.remove('hidden');
         $('userEmail').textContent=user.email;
         if(!$('fData').value)$('fData').value=new Date().toISOString().slice(0,10);
-        docRef().get().then(d=>{records=(d.exists&&d.data().records)||[];render();}).catch(()=>render());
+        docRef().get().then(d=>{const dt=d.exists?d.data():{};records=dt.records||[];journey=(Array.isArray(dt.journey)&&dt.journey.length===7)?dt.journey.slice():DEFAULT_JOURNEY.slice();closures=dt.closures||[];render();}).catch(()=>render());
       }else{appView.classList.add('hidden');authView.classList.remove('hidden');}
     });
   }
