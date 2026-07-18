@@ -273,6 +273,66 @@
     .fab-container{bottom:calc(16px + env(safe-area-inset-bottom))}
     .modal{border-radius:20px}
   }
+
+  /* ===== Navegação por seções ===== */
+  .viewnav{display:flex;gap:8px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+  .vn-item{padding:9px 16px;border-radius:999px;border:1px solid var(--border);background:var(--canvas);color:var(--text2);font-weight:600;font-size:14px;cursor:pointer;font-family:inherit;transition:all .15s}
+  .vn-item:hover{background:var(--soft)}
+  .vn-item.active{background:var(--grad-blue);color:#fff;border-color:transparent;box-shadow:0 8px 18px -8px rgba(39,131,222,.6)}
+  .vn-add{margin-left:auto;padding:9px 16px;border-radius:999px;border:none;cursor:pointer;font-family:inherit;font-weight:700;font-size:14px;color:#fff;background:var(--grad-brand);box-shadow:0 8px 18px -8px rgba(99,102,241,.55)}
+  .vn-add:hover{filter:brightness(1.05)}
+  .bottomnav{display:none}
+
+  /* ===== Calendário ===== */
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+  .cal-title{font-size:17px;font-weight:700}
+  .cal-nav{width:38px;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--canvas);font-size:20px;line-height:1;cursor:pointer;color:var(--text)}
+  .cal-nav:hover{background:var(--soft)}
+  .cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:6px}
+  .cal-dow span{text-align:center;font-size:11.5px;font-weight:700;color:var(--text2);text-transform:uppercase}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .cal-cell{min-height:64px;border:1px solid var(--border);border-radius:12px;background:var(--soft);padding:6px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;cursor:pointer;font-family:inherit;color:var(--text);transition:transform .1s,border-color .15s}
+  .cal-cell.empty{border:none;background:transparent;cursor:default}
+  .cal-cell:not(.empty):hover{border-color:var(--blue)}
+  .cal-cell:active{transform:scale(.97)}
+  .cal-d{font-size:13px;font-weight:700}
+  .cal-b{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
+  .cal-cell.pos{background:var(--green-soft)} .cal-cell.pos .cal-b{color:var(--green)}
+  .cal-cell.neg{background:var(--red-soft)} .cal-cell.neg .cal-b{color:var(--red)}
+  .cal-legend{display:flex;gap:16px;align-items:center;margin-top:14px;font-size:12.5px;color:var(--text2);flex-wrap:wrap}
+  .cal-legend .lg{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px}
+  .cal-legend .lg.pos{background:var(--green-soft);border:1px solid var(--green)}
+  .cal-legend .lg.neg{background:var(--red-soft);border:1px solid var(--red)}
+  .cal-legend .lg.none{background:var(--soft);border:1px solid var(--border)}
+
+  /* ===== Configurações ===== */
+  .set-group{margin-bottom:16px}
+  .set-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+  .set-row:last-of-type{border-bottom:none}
+  .set-row span{color:var(--text2);font-size:14px}
+  .set-link{color:var(--blue);font-weight:600;text-decoration:none}
+  .set-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+
+  /* ===== MOBILE: barra inferior + abas ===== */
+  @media (max-width:720px){
+    .viewnav{display:none}
+    .bottomnav{display:flex;align-items:center;justify-content:space-around;position:fixed;left:0;right:0;bottom:0;z-index:60;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:rgba(255,255,255,.72);backdrop-filter:blur(16px) saturate(1.5);-webkit-backdrop-filter:blur(16px) saturate(1.5);border-top:1px solid var(--border);box-shadow:0 -6px 20px -10px rgba(0,0,0,.28)}
+    .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;font-family:inherit;color:var(--text2);padding:4px 0}
+    .bn-ico{font-size:20px;line-height:1;opacity:.65}
+    .bn-lbl{font-size:11px;font-weight:600}
+    .bn-item.active{color:var(--blue)}
+    .bn-item.active .bn-ico{opacity:1}
+    .bn-add{flex:0 0 auto;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;color:#fff;font-size:30px;line-height:1;background:var(--grad-brand);box-shadow:0 10px 22px -8px rgba(99,102,241,.7);margin-top:-24px}
+    .bn-add:active{transform:scale(.95)}
+    body{padding-bottom:calc(100px + env(safe-area-inset-bottom))}
+    .cal-cell{min-height:52px;border-radius:10px;padding:4px 5px}
+    .cal-d{font-size:12px}
+    .cal-b{font-size:10px}
+    .cal-grid,.cal-dow{gap:4px}
+  }
+  @media (prefers-color-scheme:dark){
+    .bottomnav{background:rgba(28,28,27,.78)}
+  }
 </style>
 </head>
 <body>
@@ -299,55 +359,106 @@
     <span class="who"><span class="who-dot"></span><b id="userEmail">—</b><button class="link" id="logoutBtn">Sair</button></span>
   </div>
 
-  <div class="filterbar">
-    <label for="filterMonth">Filtrar por mês:</label>
-    <select id="filterMonth"><option value="all">Todos os meses</option></select>
-    <span class="scope" id="scopeLabel"></span>
+  <div class="viewnav">
+    <button class="vn-item active" data-nav="home">🏠 Home</button>
+    <button class="vn-item" data-nav="calendar">📅 Calendário</button>
+    <button class="vn-item" data-nav="settings">⚙️ Configurações</button>
+    <button class="vn-add" id="navAdd">＋ Registrar dia</button>
   </div>
 
-  <div class="summary">
-    <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k">Total trabalhado</div><div class="v" id="totWorked">0h 00m</div></div></div>
-    <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k">Total previsto</div><div class="v" id="totExpected">0h 00m</div></div></div>
-    <div class="stat" id="balanceCard"><div class="stat-ico ico-balance">⚖️</div><div class="stat-body"><div class="k">Saldo</div><div class="v" id="totBalance">0h 00m</div></div></div>
-  </div>
-
-  <div class="card form-card" id="formCard">
-    <div class="sheet-head">
-      <div class="section-title">Registrar dia</div>
-      <button class="link sheet-close" id="sheetClose">Fechar</button>
+  <!-- SEÇÃO: HOME -->
+  <div class="mview" id="viewHome" data-view="home">
+    <div class="filterbar">
+      <label for="filterMonth">Filtrar por mês:</label>
+      <select id="filterMonth"><option value="all">Todos os meses</option></select>
+      <span class="scope" id="scopeLabel"></span>
     </div>
-    <div class="form-grid">
-      <div class="field"><label for="fData">Data</label><input type="date" id="fData"></div>
-      <div class="field"><label for="fE1">Entrada 1</label><input type="time" id="fE1"></div>
-      <div class="field"><label for="fS1">Saída 1</label><input type="time" id="fS1"></div>
-      <div class="field"><label for="fE2">Entrada 2</label><input type="time" id="fE2"></div>
-      <div class="field"><label for="fS2">Saída 2</label><input type="time" id="fS2"></div>
-      <div class="field"><label for="fObs">Observações</label><input type="text" id="fObs" placeholder="Ex.: Feriado"></div>
+
+    <div class="summary">
+      <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k">Total trabalhado</div><div class="v" id="totWorked">0h 00m</div></div></div>
+      <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k">Total previsto</div><div class="v" id="totExpected">0h 00m</div></div></div>
+      <div class="stat" id="balanceCard"><div class="stat-ico ico-balance">⚖️</div><div class="stat-body"><div class="k">Saldo</div><div class="v" id="totBalance">0h 00m</div></div></div>
     </div>
-    <button class="btn full" id="addBtn">Adicionar / Atualizar</button>
-    <p class="hint">Jornada prevista: Seg–Sex 8h, Sáb 4h, Dom 0h. Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas. Data existente é atualizada.</p>
-    <div class="msg" id="appMsg"></div>
+
+    <div class="card" style="margin-top:16px">
+      <div class="section-title">Registros</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th>Data</th><th>Dia</th><th>Ent 1</th><th>Saí 1</th><th>Ent 2</th><th>Saí 2</th>
+            <th>Trabalhadas</th><th>Previstas</th><th>Saldo</th><th>Obs.</th><th></th>
+          </tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="card-list" id="cardList"></div>
+      <div class="empty hidden" id="emptyState">Nenhum registro neste período.</div>
+    </div>
   </div>
 
-  <div class="form-actions actions-row">
-    <button class="btn secondary sm" id="exportBtn">Exportar xlsx</button>
-    <label class="btn secondary sm" for="importInput" style="display:inline-flex;align-items:center">Importar xlsx</label>
+  <!-- SEÇÃO: CALENDÁRIO -->
+  <div class="mview hidden" id="viewCalendar" data-view="calendar">
+    <div class="card">
+      <div class="cal-head">
+        <button class="cal-nav" id="calPrev" aria-label="Mês anterior">‹</button>
+        <div class="cal-title" id="calTitle">—</div>
+        <button class="cal-nav" id="calNext" aria-label="Próximo mês">›</button>
+      </div>
+      <div class="cal-dow"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
+      <div class="cal-grid" id="calDays"></div>
+      <div class="cal-legend"><span><span class="lg pos"></span>Saldo positivo</span><span><span class="lg neg"></span>Saldo negativo</span><span><span class="lg none"></span>Sem registro</span></div>
+      <p class="hint">Toque em um dia para ver os horários marcados ou registrar um novo dia.</p>
+    </div>
   </div>
+
+  <!-- SEÇÃO: CONFIGURAÇÕES -->
+  <div class="mview hidden" id="viewSettings" data-view="settings">
+    <div class="card set-group">
+      <div class="section-title">Conta</div>
+      <div class="set-row"><span>E-mail</span><b id="setEmail">—</b></div>
+      <div class="set-actions">
+        <button class="btn secondary sm" id="setResetPw">Redefinir senha</button>
+        <button class="btn danger sm" id="setLogout">Sair da conta</button>
+      </div>
+    </div>
+    <div class="card set-group">
+      <div class="section-title">Site</div>
+      <div class="set-row"><span>Endereço</span><a class="set-link" href="https://silvasantosgss.github.io/pontocloud/" target="_blank" rel="noopener">Abrir site ↗</a></div>
+      <div class="set-row"><span>Jornada padrão</span><b>Seg–Sex 8h · Sáb 4h · Dom 0h</b></div>
+      <p class="hint">Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas no dia.</p>
+    </div>
+    <div class="card set-group">
+      <div class="section-title">Relatórios</div>
+      <div class="set-row"><span>Saldo acumulado</span><b id="setBalance">—</b></div>
+      <div class="set-actions">
+        <button class="btn secondary sm" id="exportBtn">Exportar xlsx</button>
+        <label class="btn secondary sm" for="importInput" style="display:inline-flex;align-items:center">Importar xlsx</label>
+      </div>
+      <p class="hint" id="setReportInfo"></p>
+    </div>
+  </div>
+
   <input type="file" id="importInput" accept=".xlsx,.xls" class="hidden">
 
-  <div class="card" style="margin-top:16px">
-    <div class="section-title">Registros</div>
-    <div class="table-wrap">
-      <table>
-        <thead><tr>
-          <th>Data</th><th>Dia</th><th>Ent 1</th><th>Saí 1</th><th>Ent 2</th><th>Saí 2</th>
-          <th>Trabalhadas</th><th>Previstas</th><th>Saldo</th><th>Obs.</th><th></th>
-        </tr></thead>
-        <tbody id="rows"></tbody>
-      </table>
+  <!-- POP-UP: Registrar dia (+) -->
+  <div class="modal-backdrop" id="formBackdrop">
+    <div class="modal card" role="dialog" aria-modal="true">
+      <div class="sheet-head">
+        <div class="section-title">Registrar dia</div>
+        <button class="link" id="sheetClose">Fechar</button>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label for="fData">Data</label><input type="date" id="fData"></div>
+        <div class="field"><label for="fE1">Entrada 1</label><input type="time" id="fE1"></div>
+        <div class="field"><label for="fS1">Saída 1</label><input type="time" id="fS1"></div>
+        <div class="field"><label for="fE2">Entrada 2</label><input type="time" id="fE2"></div>
+        <div class="field"><label for="fS2">Saída 2</label><input type="time" id="fS2"></div>
+        <div class="field" style="grid-column:1/-1"><label for="fObs">Observações</label><input type="text" id="fObs" placeholder="Ex.: Feriado"></div>
+      </div>
+      <button class="btn full" id="addBtn">Adicionar / Atualizar</button>
+      <p class="hint">Jornada prevista: Seg–Sex 8h, Sáb 4h, Dom 0h. Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas. Data existente é atualizada.</p>
+      <div class="msg" id="appMsg"></div>
     </div>
-    <div class="card-list" id="cardList"></div>
-    <div class="empty hidden" id="emptyState">Nenhum registro neste período.</div>
   </div>
 
   <!-- POP-UP: detalhes e edição do dia -->
@@ -377,12 +488,13 @@
     </div>
   </div>
 
-  <div class="sheet-backdrop" id="backdrop"></div>
-  <div class="fab-container">
-    <button class="fab ghost" id="fabImport" title="Importar xlsx" aria-label="Importar">⬆</button>
-    <button class="fab ghost" id="fabExport" title="Exportar xlsx" aria-label="Exportar">⬇</button>
-    <button class="fab primary" id="fabAdd" title="Registrar dia" aria-label="Adicionar">+</button>
-  </div>
+  <!-- BARRA INFERIOR (mobile) -->
+  <nav class="bottomnav" id="bottomNav">
+    <button class="bn-item active" data-nav="home"><span class="bn-ico">🏠</span><span class="bn-lbl">Home</span></button>
+    <button class="bn-item" data-nav="calendar"><span class="bn-ico">📅</span><span class="bn-lbl">Calendário</span></button>
+    <button class="bn-add" id="bnAdd" aria-label="Registrar dia">＋</button>
+    <button class="bn-item" data-nav="settings"><span class="bn-ico">⚙️</span><span class="bn-lbl">Config.</span></button>
+  </nav>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -539,14 +651,73 @@
     $('balanceCard').className='stat '+(bal>=0?'pos':'neg');
     $('balanceCard').querySelector('.k').textContent=(f==='all')?'Saldo acumulado':'Saldo do mês';
     document.querySelectorAll('.del').forEach(b=>b.onclick=(e)=>{e.stopPropagation();records=records.filter(x=>x.data!==b.dataset.d);save();render();});
+    if(!$('viewCalendar').classList.contains('hidden'))renderCalendar();
+    if(!$('viewSettings').classList.contains('hidden'))renderSettings();
   }
   $('filterMonth').onchange=render;
 
-  function openSheet(){$('formCard').classList.add('open');$('backdrop').classList.add('open');}
-  function closeSheet(){$('formCard').classList.remove('open');$('backdrop').classList.remove('open');}
-  $('fabAdd').onclick=openSheet;$('sheetClose').onclick=closeSheet;$('backdrop').onclick=closeSheet;
-  $('fabExport').onclick=()=>$('exportBtn').click();
-  $('fabImport').onclick=()=>$('importInput').click();
+  function openSheet(){if(!$('fData').value)$('fData').value=new Date().toISOString().slice(0,10);$('formBackdrop').classList.add('open');}
+  function closeSheet(){$('formBackdrop').classList.remove('open');}
+  $('sheetClose').onclick=closeSheet;
+  $('formBackdrop').addEventListener('click',e=>{if(e.target===$('formBackdrop'))closeSheet();});
+
+  // ---- Navegação por seções ----
+  function setView(name){
+    document.querySelectorAll('.mview').forEach(el=>el.classList.toggle('hidden', el.dataset.view!==name));
+    document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active', b.dataset.nav===name));
+    if(name==='calendar')renderCalendar();
+    if(name==='settings')renderSettings();
+    window.scrollTo(0,0);
+  }
+  document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.nav)));
+  $('navAdd').onclick=openSheet;
+  $('bnAdd').onclick=openSheet;
+
+  // ---- Calendário ----
+  let calYM=null;
+  function curYM(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');}
+  function shiftYM(ym,delta){let[y,m]=ym.split('-').map(Number);m+=delta;while(m<1){m+=12;y--;}while(m>12){m-=12;y++;}return y+'-'+String(m).padStart(2,'0');}
+  function openDay(ds){
+    const r=records.find(x=>x.data===ds);
+    if(r){openDetail(ds);}
+    else{$('fData').value=ds;$('fE1').value='';$('fS1').value='';$('fE2').value='';$('fS2').value='';$('fObs').value='';openSheet();}
+  }
+  function renderCalendar(){
+    const f=$('filterMonth').value;
+    if(!calYM)calYM=(f&&f!=='all')?f:curYM();
+    const[y,m]=calYM.split('-').map(Number);
+    $('calTitle').textContent=MONTHS[m-1]+' '+y;
+    const first=new Date(y,m-1,1).getDay(), days=new Date(y,m,0).getDate();
+    const grid=$('calDays');grid.innerHTML='';
+    for(let i=0;i<first;i++){const e=document.createElement('div');e.className='cal-cell empty';grid.appendChild(e);}
+    for(let d=1;d<=days;d++){
+      const ds=calYM+'-'+String(d).padStart(2,'0');
+      const r=records.find(x=>x.data===ds);
+      const cell=document.createElement('button');
+      cell.className='cal-cell'+(r?(recalc(r),r.balanceMin>=0?' pos':' neg'):'');
+      cell.innerHTML=`<span class="cal-d">${d}</span>`+(r?`<span class="cal-b">${fmtSigned(r.balanceMin)}</span>`:'');
+      cell.addEventListener('click',()=>openDay(ds));
+      grid.appendChild(cell);
+    }
+  }
+  $('calPrev').onclick=()=>{calYM=shiftYM(calYM||curYM(),-1);renderCalendar();};
+  $('calNext').onclick=()=>{calYM=shiftYM(calYM||curYM(),1);renderCalendar();};
+
+  // ---- Configurações ----
+  function renderSettings(){
+    if(auth&&auth.currentUser)$('setEmail').textContent=auth.currentUser.email;
+    let tw=0,te=0;records.forEach(r=>{recalc(r);tw+=r.workedMin;te+=r.expectedMin;});
+    $('setBalance').textContent=fmtSigned(tw-te);
+    $('setBalance').style.color=(tw-te)>=0?'var(--green)':'var(--red)';
+    $('setReportInfo').textContent=records.length+' registro(s) · '+fmt(tw)+' trabalhadas · '+fmt(te)+' previstas.';
+  }
+  $('setResetPw').onclick=()=>{
+    if(!auth||!auth.currentUser)return;
+    auth.sendPasswordResetEmail(auth.currentUser.email)
+      .then(()=>alert('Enviamos um e-mail para redefinir sua senha.'))
+      .catch(e=>alert('Erro: '+friendlyErr(e)));
+  };
+  $('setLogout').onclick=()=>auth&&auth.signOut();
 
   $('addBtn').onclick=()=>{
     const data=$('fData').value;
