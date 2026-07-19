@@ -404,13 +404,13 @@
 <div class="auth-wrap" id="authView">
   <div class="card auth-card">
     <div class="brand"><div class="logo">⏱</div><h1>Controle de Ponto</h1></div>
-    <p class="sub">Entre para acessar suas horas em qualquer dispositivo.</p>
-    <label for="email">E-mail</label>
+    <p class="sub" data-i18n="login_sub">Entre para acessar suas horas em qualquer dispositivo.</p>
+    <label for="email" data-i18n="email">E-mail</label>
     <input type="email" id="email" placeholder="voce@exemplo.com" autocomplete="email">
-    <label for="password">Senha</label>
-    <input type="password" id="password" placeholder="Mínimo 6 caracteres" autocomplete="current-password">
-    <button class="btn full" id="loginBtn">Entrar</button>
-    <button class="btn secondary full" id="signupBtn" style="margin-top:10px">Criar conta</button>
+    <label for="password" data-i18n="password">Senha</label>
+    <input type="password" id="password" placeholder="Mínimo 6 caracteres" data-i18n-ph="ph_password" autocomplete="current-password">
+    <button class="btn full" id="loginBtn" data-i18n="login_btn">Entrar</button>
+    <button class="btn secondary full" id="signupBtn" style="margin-top:10px" data-i18n="signup_btn">Criar conta</button>
     <div class="msg" id="authMsg"></div>
   </div>
 </div>
@@ -418,48 +418,48 @@
 <!-- APP -->
 <div class="wrap hidden" id="appView">
   <div class="topbar">
-    <div class="brand" style="margin:0"><div class="logo">⏱</div><div><h1>Controle de Ponto</h1><div class="brand-sub">Suas horas em qualquer dispositivo</div></div></div>
-    <span class="who"><span class="who-dot"></span><b id="userEmail">—</b><button class="link" id="logoutBtn">Sair</button></span>
+    <div class="brand" style="margin:0"><div class="logo">⏱</div><div><h1>Controle de Ponto</h1><div class="brand-sub" data-i18n="brand_sub">Suas horas em qualquer dispositivo</div></div></div>
+    <span class="who"><span class="who-dot"></span><b id="userEmail">—</b><button class="link" id="logoutBtn" data-i18n="logout">Sair</button></span>
   </div>
 
   <div class="viewnav">
-    <button class="vn-item active" data-nav="home">🏠 Home</button>
-    <button class="vn-item" data-nav="calendar">📅 Calendário</button>
-    <button class="vn-item" data-nav="closures">🧾 Fechamentos</button>
-    <button class="vn-item" data-nav="settings">⚙️ Configurações</button>
-    <button class="vn-add" id="navAdd">＋ Registrar dia</button>
+    <button class="vn-item active" data-nav="home" data-i18n="nav_home">🏠 Home</button>
+    <button class="vn-item" data-nav="calendar" data-i18n="nav_calendar">📅 Calendário</button>
+    <button class="vn-item" data-nav="closures" data-i18n="nav_closures">🧾 Fechamentos</button>
+    <button class="vn-item" data-nav="settings" data-i18n="nav_settings">⚙️ Configurações</button>
+    <button class="vn-add" id="navAdd" data-i18n="nav_add">＋ Registrar dia</button>
   </div>
 
   <!-- SEÇÃO: HOME -->
   <div class="mview" id="viewHome" data-view="home">
     <div class="filterbar">
-      <label for="filterMonth">Filtrar:</label>
+      <label for="filterMonth" data-i18n="filter_label">Filtrar:</label>
       <select id="filterMonth"><option value="all">Todos os meses</option></select>
       <span class="date-range hidden" id="customRange">
-        <input type="date" id="fStart"><span class="dr-sep">até</span><input type="date" id="fEnd">
+        <input type="date" id="fStart"><span class="dr-sep" data-i18n="until">até</span><input type="date" id="fEnd">
       </span>
       <span class="scope" id="scopeLabel"></span>
     </div>
 
     <div class="summary">
       <div class="stat" id="balanceCard"><div class="stat-ico ico-balance">⚖️</div><div class="stat-body"><div class="k">Saldo</div><div class="v" id="totBalance">0h 00m</div></div></div>
-      <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k">Trabalhado hoje</div><div class="v" id="totWorked">0h 00m</div></div></div>
-      <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k">Previsto hoje</div><div class="v" id="totExpected">0h 00m</div></div></div>
+      <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k" data-i18n="card_worked_today">Trabalhado hoje</div><div class="v" id="totWorked">0h 00m</div></div></div>
+      <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k" data-i18n="card_expected_today">Previsto hoje</div><div class="v" id="totExpected">0h 00m</div></div></div>
     </div>
 
     <div class="card" style="margin-top:16px">
-      <div class="section-title">Registros</div>
+      <div class="section-title" data-i18n="records">Registros</div>
       <div class="table-wrap">
         <table>
           <thead><tr>
-            <th>Data</th><th>Dia</th><th>Ent 1</th><th>Saí 1</th><th>Ent 2</th><th>Saí 2</th>
-            <th>Trabalhadas</th><th>Previstas</th><th>Saldo</th><th>Obs.</th><th></th>
+            <th data-i18n="th_date">Data</th><th data-i18n="th_day">Dia</th><th data-i18n="th_in1">Ent 1</th><th data-i18n="th_out1">Saí 1</th><th data-i18n="th_in2">Ent 2</th><th data-i18n="th_out2">Saí 2</th>
+            <th data-i18n="th_worked">Trabalhadas</th><th data-i18n="th_expected">Previstas</th><th data-i18n="th_balance">Saldo</th><th data-i18n="th_obs">Obs.</th><th></th>
           </tr></thead>
           <tbody id="rows"></tbody>
         </table>
       </div>
       <div class="card-list" id="cardList"></div>
-      <div class="empty hidden" id="emptyState">Nenhum registro neste período.</div>
+      <div class="empty hidden" id="emptyState" data-i18n="no_records_period">Nenhum registro neste período.</div>
     </div>
   </div>
 
@@ -467,20 +467,20 @@
   <div class="mview hidden" id="viewCalendar" data-view="calendar">
     <div class="card">
       <div class="cal-head">
-        <button class="cal-nav" id="calPrev" aria-label="Mês anterior">‹</button>
+        <button class="cal-nav" id="calPrev" aria-label="Mês anterior" data-i18n-aria="cal_prev">‹</button>
         <div class="cal-title" id="calTitle">—</div>
-        <button class="cal-nav" id="calNext" aria-label="Próximo mês">›</button>
+        <button class="cal-nav" id="calNext" aria-label="Próximo mês" data-i18n-aria="cal_next">›</button>
       </div>
       <div class="cal-filters">
-        <button class="cf active" data-cf="all">Todos</button>
-        <button class="cf" data-cf="pos">Positivo</button>
-        <button class="cf" data-cf="neg">Negativo</button>
-        <button class="cf" data-cf="none">Sem registro</button>
+        <button class="cf active" data-cf="all" data-i18n="cf_all">Todos</button>
+        <button class="cf" data-cf="pos" data-i18n="cf_pos">Positivo</button>
+        <button class="cf" data-cf="neg" data-i18n="cf_neg">Negativo</button>
+        <button class="cf" data-cf="none" data-i18n="cf_none">Sem registro</button>
       </div>
-      <div class="cal-dow"><span>Dom</span><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sáb</span></div>
+      <div class="cal-dow"><span data-i18n="dow0">Dom</span><span data-i18n="dow1">Seg</span><span data-i18n="dow2">Ter</span><span data-i18n="dow3">Qua</span><span data-i18n="dow4">Qui</span><span data-i18n="dow5">Sex</span><span data-i18n="dow6">Sáb</span></div>
       <div class="cal-grid" id="calDays"></div>
-      <div class="cal-legend"><span><span class="lg pos"></span>Saldo positivo</span><span><span class="lg neg"></span>Saldo negativo</span><span><span class="lg none"></span>Sem registro</span></div>
-      <p class="hint">Toque em um dia para ver os horários marcados ou registrar um novo dia.</p>
+      <div class="cal-legend"><span><span class="lg pos"></span><span data-i18n="legend_pos">Saldo positivo</span></span><span><span class="lg neg"></span><span data-i18n="legend_neg">Saldo negativo</span></span><span><span class="lg none"></span><span data-i18n="legend_none">Sem registro</span></span></div>
+      <p class="hint" data-i18n="cal_hint">Toque em um dia para ver os horários marcados ou registrar um novo dia.</p>
       <div class="cal-list" id="calList"></div>
     </div>
   </div>
@@ -488,34 +488,45 @@
   <!-- SEÇÃO: CONFIGURAÇÕES -->
   <div class="mview hidden" id="viewSettings" data-view="settings">
     <div class="card set-group">
-      <div class="section-title">Conta</div>
-      <div class="set-row"><span>E-mail</span><b id="setEmail">—</b></div>
+      <div class="section-title" data-i18n="s_account">Conta</div>
+      <div class="set-row"><span data-i18n="email">E-mail</span><b id="setEmail">—</b></div>
       <div class="set-actions">
-        <button class="btn secondary sm" id="setResetPw">Redefinir senha</button>
-        <button class="btn danger sm" id="setLogout">Sair da conta</button>
+        <button class="btn secondary sm" id="setResetPw" data-i18n="s_reset_pw">Redefinir senha</button>
+        <button class="btn danger sm" id="setLogout" data-i18n="s_logout">Sair da conta</button>
       </div>
     </div>
     <div class="card set-group">
-      <div class="section-title">Jornada de trabalho</div>
-      <p class="hint" style="margin-top:2px">Defina quantas horas são previstas para cada dia da semana.</p>
+      <div class="section-title" data-i18n="s_journey">Jornada de trabalho</div>
+      <p class="hint" style="margin-top:2px" data-i18n="s_journey_hint">Defina quantas horas são previstas para cada dia da semana.</p>
       <div class="journey-grid" id="journeyGrid"></div>
-      <div class="set-actions"><button class="btn sm" id="saveJourney">Salvar jornada</button></div>
+      <div class="set-actions"><button class="btn sm" id="saveJourney" data-i18n="s_save_journey">Salvar jornada</button></div>
       <div class="msg" id="journeyMsg"></div>
     </div>
     <div class="card set-group">
-      <div class="section-title">Site</div>
-      <div class="set-row"><span>Endereço</span><a class="set-link" href="https://silvasantosgss.github.io/pontocloud/" target="_blank" rel="noopener">Abrir site ↗</a></div>
-      <div class="set-row"><span>Jornada atual</span><b id="journeySummary">—</b></div>
-      <p class="hint">Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas no dia.</p>
+      <div class="section-title" data-i18n="s_site">Site</div>
+      <div class="set-row"><span data-i18n="s_address">Endereço</span><a class="set-link" href="https://silvasantosgss.github.io/pontocloud/" target="_blank" rel="noopener" data-i18n="s_open_site">Abrir site ↗</a></div>
+      <div class="set-row"><span data-i18n="s_current_journey">Jornada atual</span><b id="journeySummary">—</b></div>
+      <p class="hint" data-i18n="s_holiday_hint">Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas no dia.</p>
     </div>
     <div class="card set-group">
-      <div class="section-title">Relatórios</div>
-      <div class="set-row"><span>Saldo acumulado</span><b id="setBalance">—</b></div>
+      <div class="section-title" data-i18n="s_reports">Relatórios</div>
+      <div class="set-row"><span data-i18n="s_accum_balance">Saldo acumulado</span><b id="setBalance">—</b></div>
       <div class="set-actions">
-        <button class="btn secondary sm" id="exportBtn">Exportar xlsx</button>
-        <label class="btn secondary sm" for="importInput" style="display:inline-flex;align-items:center">Importar xlsx</label>
+        <button class="btn secondary sm" id="exportBtn" data-i18n="s_export">Exportar xlsx</button>
+        <label class="btn secondary sm" for="importInput" style="display:inline-flex;align-items:center" data-i18n="s_import">Importar xlsx</label>
       </div>
       <p class="hint" id="setReportInfo"></p>
+    </div>
+    <div class="card set-group">
+      <div class="section-title" data-i18n="s_language">Idioma</div>
+      <p class="hint" style="margin-top:2px" data-i18n="s_language_hint">Escolha o idioma da interface.</p>
+      <div class="set-row"><span data-i18n="s_language">Idioma</span>
+        <select id="langSelect" style="width:auto;min-width:150px;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--text);font:inherit">
+          <option value="pt">Português</option>
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+      </div>
     </div>
   </div>
 
@@ -524,38 +535,57 @@
     <div class="card">
       <div class="cl-head">
         <div>
-          <div class="section-title">Fechamentos</div>
-          <div class="detail-sub">Visualize os períodos em que você fechou seus horários</div>
+          <div class="section-title" data-i18n="cl_title">Fechamentos</div>
+          <div class="detail-sub" data-i18n="cl_sub">Visualize os períodos em que você fechou seus horários</div>
         </div>
-        <button class="btn sm" id="newClosureBtn">＋ Novo fechamento</button>
+        <button class="btn sm" id="newClosureBtn" data-i18n="cl_new">＋ Novo fechamento</button>
       </div>
       <div class="table-wrap">
         <table id="closureTable">
           <thead><tr>
-            <th>Data Inicial</th><th>Data Final</th><th>Total de registros</th><th>Total trabalhado</th><th>Saldo de horas</th><th>Ações</th>
+            <th data-i18n="cl_th_start">Data Inicial</th><th data-i18n="cl_th_end">Data Final</th><th data-i18n="cl_th_count">Total de registros</th><th data-i18n="cl_th_worked">Total trabalhado</th><th data-i18n="cl_th_balance">Saldo de horas</th><th data-i18n="cl_th_actions">Ações</th>
           </tr></thead>
           <tbody id="closureRows"></tbody>
         </table>
       </div>
       <div class="card-list" id="closureCards"></div>
-      <div class="empty hidden" id="closureEmpty">Nenhum fechamento criado ainda. Crie o primeiro com “Novo fechamento”.</div>
+      <div class="empty hidden" id="closureEmpty" data-i18n="cl_empty">Nenhum fechamento criado ainda. Crie o primeiro com “Novo fechamento”.</div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <div class="cl-head">
+        <div>
+          <div class="section-title" data-i18n="vac_title">Férias</div>
+          <div class="detail-sub" data-i18n="vac_sub">Registre e acompanhe seus períodos de férias</div>
+        </div>
+        <button class="btn sm" id="newVacBtn" data-i18n="vac_new">＋ Novo período de férias</button>
+      </div>
+      <div class="table-wrap">
+        <table id="vacTable">
+          <thead><tr>
+            <th data-i18n="vac_th_start">Data Inicial</th><th data-i18n="vac_th_end">Data Final</th><th data-i18n="vac_th_days">Dias</th><th data-i18n="vac_th_note">Observação</th><th data-i18n="vac_th_actions">Ações</th>
+          </tr></thead>
+          <tbody id="vacRows"></tbody>
+        </table>
+      </div>
+      <div class="card-list" id="vacCards"></div>
+      <div class="empty hidden" id="vacEmpty" data-i18n="vac_empty">Nenhum período de férias registrado. Crie o primeiro com “Novo período de férias”.</div>
     </div>
     <div class="card hidden" id="closureReport" style="margin-top:16px">
       <div class="cl-head">
         <div>
-          <div class="section-title">Relatório do fechamento</div>
+          <div class="section-title" data-i18n="cl_report_title">Relatório do fechamento</div>
           <div class="detail-sub" id="crRange">—</div>
         </div>
-        <button class="btn secondary sm" id="crBack">← Voltar</button>
+        <button class="btn secondary sm" id="crBack" data-i18n="back">← Voltar</button>
       </div>
       <div class="summary" style="margin-top:14px">
-        <div class="stat" id="crBalCard"><div class="stat-ico ico-balance">⚖️</div><div class="stat-body"><div class="k">Saldo do período</div><div class="v" id="crBal">0h 00m</div></div></div>
-        <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k">Total trabalhado</div><div class="v" id="crWorked">0h 00m</div></div></div>
-        <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k">Total previsto</div><div class="v" id="crExpected">0h 00m</div></div></div>
+        <div class="stat" id="crBalCard"><div class="stat-ico ico-balance">⚖️</div><div class="stat-body"><div class="k" data-i18n="cl_balance_period">Saldo do período</div><div class="v" id="crBal">0h 00m</div></div></div>
+        <div class="stat"><div class="stat-ico ico-blue">🕐</div><div class="stat-body"><div class="k" data-i18n="cl_total_worked">Total trabalhado</div><div class="v" id="crWorked">0h 00m</div></div></div>
+        <div class="stat"><div class="stat-ico ico-neutral">📅</div><div class="stat-body"><div class="k" data-i18n="cl_total_expected">Total previsto</div><div class="v" id="crExpected">0h 00m</div></div></div>
       </div>
-      <div class="section-title" style="margin-bottom:4px">Registros do período</div>
+      <div class="section-title" style="margin-bottom:4px" data-i18n="cl_period_records">Registros do período</div>
       <div class="cal-list show" id="crList"></div>
-      <div class="empty hidden" id="crEmpty">Nenhum registro neste período.</div>
+      <div class="empty hidden" id="crEmpty" data-i18n="no_records_period">Nenhum registro neste período.</div>
     </div>
   </div>
 
@@ -565,19 +595,19 @@
   <div class="modal-backdrop" id="formBackdrop">
     <div class="modal card" role="dialog" aria-modal="true">
       <div class="sheet-head">
-        <div class="section-title">Registrar dia</div>
-        <button class="link" id="sheetClose">Fechar</button>
+        <div class="section-title" data-i18n="m_add_day">Registrar dia</div>
+        <button class="link" id="sheetClose" data-i18n="close">Fechar</button>
       </div>
       <div class="form-grid">
-        <div class="field"><label for="fData">Data</label><input type="date" id="fData"></div>
-        <div class="field"><label for="fE1">Entrada 1</label><input type="time" id="fE1"></div>
-        <div class="field"><label for="fS1">Saída 1</label><input type="time" id="fS1"></div>
-        <div class="field"><label for="fE2">Entrada 2</label><input type="time" id="fE2"></div>
-        <div class="field"><label for="fS2">Saída 2</label><input type="time" id="fS2"></div>
-        <div class="field" style="grid-column:1/-1"><label for="fObs">Observações</label><input type="text" id="fObs" placeholder="Ex.: Feriado"></div>
+        <div class="field"><label for="fData" data-i18n="f_date">Data</label><input type="date" id="fData"></div>
+        <div class="field"><label for="fE1" data-i18n="in1">Entrada 1</label><input type="time" id="fE1"></div>
+        <div class="field"><label for="fS1" data-i18n="out1">Saída 1</label><input type="time" id="fS1"></div>
+        <div class="field"><label for="fE2" data-i18n="in2">Entrada 2</label><input type="time" id="fE2"></div>
+        <div class="field"><label for="fS2" data-i18n="out2">Saída 2</label><input type="time" id="fS2"></div>
+        <div class="field" style="grid-column:1/-1"><label for="fObs" data-i18n="notes">Observações</label><input type="text" id="fObs" placeholder="Ex.: Feriado" data-i18n-ph="ph_note"></div>
       </div>
-      <button class="btn full" id="addBtn">Adicionar / Atualizar</button>
-      <p class="hint">A jornada prevista segue o que você definiu em Configurações. Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas. Data existente é atualizada.</p>
+      <button class="btn full" id="addBtn" data-i18n="add_update">Adicionar / Atualizar</button>
+      <p class="hint" data-i18n="form_hint">A jornada prevista segue o que você definiu em Configurações. Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas. Data existente é atualizada.</p>
       <div class="msg" id="appMsg"></div>
     </div>
   </div>
@@ -587,23 +617,23 @@
     <div class="modal card" role="dialog" aria-modal="true">
       <div class="sheet-head">
         <div><div class="section-title" id="detailTitle">Detalhes do dia</div><div class="detail-sub" id="detailWeekday"></div></div>
-        <button class="link" id="detailClose">Fechar</button>
+        <button class="link" id="detailClose" data-i18n="close">Fechar</button>
       </div>
       <div class="form-grid">
-        <div class="field"><label for="dE1">Entrada 1</label><input type="time" id="dE1"></div>
-        <div class="field"><label for="dS1">Saída 1</label><input type="time" id="dS1"></div>
-        <div class="field"><label for="dE2">Entrada 2</label><input type="time" id="dE2"></div>
-        <div class="field"><label for="dS2">Saída 2</label><input type="time" id="dS2"></div>
-        <div class="field" style="grid-column:1/-1"><label for="dObs">Observações</label><input type="text" id="dObs" placeholder="Ex.: Feriado"></div>
+        <div class="field"><label for="dE1" data-i18n="in1">Entrada 1</label><input type="time" id="dE1"></div>
+        <div class="field"><label for="dS1" data-i18n="out1">Saída 1</label><input type="time" id="dS1"></div>
+        <div class="field"><label for="dE2" data-i18n="in2">Entrada 2</label><input type="time" id="dE2"></div>
+        <div class="field"><label for="dS2" data-i18n="out2">Saída 2</label><input type="time" id="dS2"></div>
+        <div class="field" style="grid-column:1/-1"><label for="dObs" data-i18n="notes">Observações</label><input type="text" id="dObs" placeholder="Ex.: Feriado" data-i18n-ph="ph_note"></div>
       </div>
       <div class="detail-stats">
-        <div><span>Trabalhadas</span><b id="dWorked">0h 00m</b></div>
-        <div><span>Previstas</span><b id="dExpected">0h 00m</b></div>
-        <div><span>Saldo</span><b id="dBalance">0h 00m</b></div>
+        <div><span data-i18n="worked">Trabalhadas</span><b id="dWorked">0h 00m</b></div>
+        <div><span data-i18n="expected">Previstas</span><b id="dExpected">0h 00m</b></div>
+        <div><span data-i18n="balance">Saldo</span><b id="dBalance">0h 00m</b></div>
       </div>
       <div class="detail-actions">
-        <button class="btn" id="dSave">Salvar alterações</button>
-        <button class="btn danger" id="dDelete">Excluir</button>
+        <button class="btn" id="dSave" data-i18n="save_changes">Salvar alterações</button>
+        <button class="btn danger" id="dDelete" data-i18n="delete">Excluir</button>
       </div>
       <div class="msg" id="detailMsg"></div>
     </div>
@@ -614,29 +644,49 @@
     <div class="modal card" role="dialog" aria-modal="true">
       <div class="sheet-head">
         <div class="section-title" id="closureModalTitle">Novo fechamento</div>
-        <button class="link" id="closureClose">Fechar</button>
+        <button class="link" id="closureClose" data-i18n="close">Fechar</button>
       </div>
       <div class="form-grid">
-        <div class="field"><label for="clStart">Data inicial</label><input type="date" id="clStart"></div>
-        <div class="field"><label for="clEnd">Data final</label><input type="date" id="clEnd"></div>
+        <div class="field"><label for="clStart" data-i18n="cl_start">Data inicial</label><input type="date" id="clStart"></div>
+        <div class="field"><label for="clEnd" data-i18n="cl_end">Data final</label><input type="date" id="clEnd"></div>
       </div>
       <div class="detail-stats" id="closurePreview">
-        <div><span>Registros</span><b id="clRegs">0</b></div>
-        <div><span>Trabalhado</span><b id="clWorked">0h 00m</b></div>
-        <div><span>Saldo</span><b id="clBalance">0h 00m</b></div>
+        <div><span data-i18n="cl_regs">Registros</span><b id="clRegs">0</b></div>
+        <div><span data-i18n="cl_worked">Trabalhado</span><b id="clWorked">0h 00m</b></div>
+        <div><span data-i18n="balance">Saldo</span><b id="clBalance">0h 00m</b></div>
       </div>
-      <button class="btn full" id="clSave">Salvar fechamento</button>
+      <button class="btn full" id="clSave" data-i18n="cl_save">Salvar fechamento</button>
       <div class="msg" id="closureMsg"></div>
+    </div>
+  </div>
+
+  <!-- POP-UP: novo/editar período de férias -->
+  <div class="modal-backdrop" id="vacBackdrop">
+    <div class="modal card" role="dialog" aria-modal="true">
+      <div class="sheet-head">
+        <div class="section-title" id="vacModalTitle" data-i18n="vac_modal_new">Novo período de férias</div>
+        <button class="link" id="vacClose" data-i18n="close">Fechar</button>
+      </div>
+      <div class="form-grid">
+        <div class="field"><label for="vacStart" data-i18n="cl_start">Data inicial</label><input type="date" id="vacStart"></div>
+        <div class="field"><label for="vacEnd" data-i18n="cl_end">Data final</label><input type="date" id="vacEnd"></div>
+        <div class="field" style="grid-column:1/-1"><label for="vacNote" data-i18n="vac_th_note">Observação</label><input type="text" id="vacNote" data-i18n-ph="vac_note_ph" placeholder="Ex.: Férias anuais"></div>
+      </div>
+      <div class="detail-stats" style="grid-template-columns:1fr">
+        <div><span data-i18n="vac_days_label">Total de dias</span><b id="vacDaysPrev">0</b></div>
+      </div>
+      <button class="btn full" id="vacSave" data-i18n="vac_save">Salvar férias</button>
+      <div class="msg" id="vacMsg"></div>
     </div>
   </div>
 
   <!-- BARRA INFERIOR (mobile) -->
   <nav class="bottomnav" id="bottomNav">
-    <button class="bn-item active" data-nav="home"><span class="bn-ico">🏠</span><span class="bn-lbl">Home</span></button>
-    <button class="bn-item" data-nav="calendar"><span class="bn-ico">📅</span><span class="bn-lbl">Calendário</span></button>
-    <button class="bn-add" id="bnAdd" aria-label="Registrar dia">＋</button>
-    <button class="bn-item" data-nav="closures"><span class="bn-ico">🧾</span><span class="bn-lbl">Fecham.</span></button>
-    <button class="bn-item" data-nav="settings"><span class="bn-ico">⚙️</span><span class="bn-lbl">Config.</span></button>
+    <button class="bn-item active" data-nav="home"><span class="bn-ico">🏠</span><span class="bn-lbl" data-i18n="bn_home">Home</span></button>
+    <button class="bn-item" data-nav="calendar"><span class="bn-ico">📅</span><span class="bn-lbl" data-i18n="bn_calendar">Calendário</span></button>
+    <button class="bn-add" id="bnAdd" aria-label="Registrar dia" data-i18n-aria="m_add_day">＋</button>
+    <button class="bn-item" data-nav="closures"><span class="bn-ico">🧾</span><span class="bn-lbl" data-i18n="bn_closures">Fecham.</span></button>
+    <button class="bn-item" data-nav="settings"><span class="bn-ico">⚙️</span><span class="bn-lbl" data-i18n="bn_settings">Config.</span></button>
   </nav>
 </div>
 
@@ -657,13 +707,27 @@
   const $=id=>document.getElementById(id);
   const authView=$('authView'), appView=$('appView');
   const authMsg=$('authMsg'), appMsg=$('appMsg');
-  const WEEKDAYS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-  const WEEKDAYS_FULL=['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
-  const MONTHS=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  let lang=(function(){try{return localStorage.getItem('cp_lang')||'pt';}catch(e){return 'pt';}})();
+  const LANG_DATA={
+    pt:{weekdays:['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],weekdaysFull:['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'],months:['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro']},
+    en:{weekdays:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],weekdaysFull:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],months:['January','February','March','April','May','June','July','August','September','October','November','December']},
+    es:{weekdays:['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],weekdaysFull:['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],months:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']}
+  };
+  let WEEKDAYS,WEEKDAYS_FULL,MONTHS;
+  function applyLangArrays(){const d=LANG_DATA[lang]||LANG_DATA.pt;WEEKDAYS=d.weekdays;WEEKDAYS_FULL=d.weekdaysFull;MONTHS=d.months;}
+  applyLangArrays();
+  const I18N={
+    pt:{brand_sub:'Suas horas em qualquer dispositivo',logout:'Sair',login_sub:'Entre para acessar suas horas em qualquer dispositivo.',email:'E-mail',password:'Senha',ph_password:'Mínimo 6 caracteres',login_btn:'Entrar',signup_btn:'Criar conta',nav_home:'🏠 Home',nav_calendar:'📅 Calendário',nav_closures:'🧾 Fechamentos',nav_settings:'⚙️ Configurações',nav_add:'＋ Registrar dia',filter_label:'Filtrar:',all_months:'Todos os meses',custom_period:'Período personalizado',until:'até',card_balance:'Saldo',card_worked_today:'Trabalhado hoje',card_expected_today:'Previsto hoje',records:'Registros',th_date:'Data',th_day:'Dia',th_in1:'Ent 1',th_out1:'Saí 1',th_in2:'Ent 2',th_out2:'Saí 2',th_worked:'Trabalhadas',th_expected:'Previstas',th_balance:'Saldo',th_obs:'Obs.',no_records_period:'Nenhum registro neste período.',cal_prev:'Mês anterior',cal_next:'Próximo mês',cf_all:'Todos',cf_pos:'Positivo',cf_neg:'Negativo',cf_none:'Sem registro',dow0:'Dom',dow1:'Seg',dow2:'Ter',dow3:'Qua',dow4:'Qui',dow5:'Sex',dow6:'Sáb',legend_pos:'Saldo positivo',legend_neg:'Saldo negativo',legend_none:'Sem registro',cal_hint:'Toque em um dia para ver os horários marcados ou registrar um novo dia.',s_account:'Conta',s_reset_pw:'Redefinir senha',s_logout:'Sair da conta',s_journey:'Jornada de trabalho',s_journey_hint:'Defina quantas horas são previstas para cada dia da semana.',s_save_journey:'Salvar jornada',s_site:'Site',s_address:'Endereço',s_open_site:'Abrir site ↗',s_current_journey:'Jornada atual',s_holiday_hint:'Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas no dia.',s_reports:'Relatórios',s_accum_balance:'Saldo acumulado',s_export:'Exportar xlsx',s_import:'Importar xlsx',s_language:'Idioma',s_language_hint:'Escolha o idioma da interface.',cl_title:'Fechamentos',cl_sub:'Visualize os períodos em que você fechou seus horários',cl_new:'＋ Novo fechamento',cl_th_start:'Data Inicial',cl_th_end:'Data Final',cl_th_count:'Total de registros',cl_th_worked:'Total trabalhado',cl_th_balance:'Saldo de horas',cl_th_actions:'Ações',cl_empty:'Nenhum fechamento criado ainda. Crie o primeiro com “Novo fechamento”.',cl_report_title:'Relatório do fechamento',back:'← Voltar',cl_balance_period:'Saldo do período',cl_total_worked:'Total trabalhado',cl_total_expected:'Total previsto',cl_period_records:'Registros do período',vac_title:'Férias',vac_sub:'Registre e acompanhe seus períodos de férias',vac_new:'＋ Novo período de férias',vac_th_start:'Data Inicial',vac_th_end:'Data Final',vac_th_days:'Dias',vac_th_note:'Observação',vac_th_actions:'Ações',vac_empty:'Nenhum período de férias registrado. Crie o primeiro com “Novo período de férias”.',vac_modal_new:'Novo período de férias',vac_modal_edit:'Editar período de férias',vac_days_label:'Total de dias',vac_save:'Salvar férias',vac_note_ph:'Ex.: Férias anuais',m_add_day:'Registrar dia',close:'Fechar',f_date:'Data',in1:'Entrada 1',out1:'Saída 1',in2:'Entrada 2',out2:'Saída 2',notes:'Observações',ph_note:'Ex.: Feriado',add_update:'Adicionar / Atualizar',form_hint:'A jornada prevista segue o que você definiu em Configurações. Observação com “feriado”, “folga”, “férias” ou “atestado” conta como 0h previstas. Data existente é atualizada.',detail_title:'Detalhes do dia',worked:'Trabalhadas',expected:'Previstas',balance:'Saldo',save_changes:'Salvar alterações',delete:'Excluir',cl_modal_new:'Novo fechamento',cl_modal_edit:'Editar fechamento',cl_start:'Data inicial',cl_end:'Data final',cl_regs:'Registros',cl_worked:'Trabalhado',cl_save:'Salvar fechamento',bn_home:'Home',bn_calendar:'Calendário',bn_closures:'Fecham.',bn_settings:'Config.',view:'Visualizar',edit:'Editar',scope_total:'{n} registro(s) no total',scope_month:'{n} registro(s) em {month}',scope_range:'{n} registro(s) de {a} até {b}',scope_choose:'Escolha as datas do período',range_start:'início',range_end:'hoje',bal_accum:'Saldo acumulado',bal_period:'Saldo do período',bal_month:'Saldo do mês',no_mark:'Sem marcação',days_pos:'Dias com saldo positivo',days_neg:'Dias com saldo negativo',days_none:'Dias sem registro',no_days_cond:'Nenhum dia nesta condição neste mês.',tap_register:'Toque para registrar os horários',register:'Registrar',report_range:'{a} até {b} · {n} registro(s)',report_info:'{n} registro(s) · {tw} trabalhadas · {te} previstas.',reg_abbrev:'reg.',worked_abbrev:'Trab.',expected_abbrev:'Prev.',detail_day:'Dia {d}',confirm_del_closure:'Excluir este fechamento?',confirm_del_vac:'Excluir este período de férias?',msg_creating:'Criando conta…',msg_signing_in:'Entrando…',msg_journey_saved:'Jornada salva.',msg_closure_saved:'Fechamento salvo.',msg_vac_saved:'Período de férias salvo.',msg_record_saved:'Registro salvo.',msg_changes_saved:'Alterações salvas.',msg_pick_date:'Escolha uma data.',msg_choose_dates:'Escolha as datas inicial e final.',msg_start_before_end:'A data inicial deve ser antes da final.',msg_fill_email_pw:'Preencha e-mail e senha.',msg_pw_min:'A senha precisa de pelo menos 6 caracteres.',msg_no_server:'Não foi possível conectar ao servidor. Verifique sua internet, desative bloqueadores e recarregue a página.',alert_reset:'Enviamos um e-mail para redefinir sua senha.',alert_reset_err:'Erro: ',msg_import_ok:'{n} registro(s) importado(s).',msg_import_err:'Erro ao importar: ',days_count:'{n} dia(s)',err_invalid_email:'E-mail inválido.',err_user_not_found:'Conta não encontrada. Use “Criar conta” primeiro.',err_wrong_password:'Senha incorreta.',err_invalid_credential:'E-mail ou senha incorretos.',err_email_in_use:'Este e-mail já tem conta. Use “Entrar”.',err_weak_password:'A senha precisa de pelo menos 6 caracteres.',err_network:'Falha de rede. Abra o site em uma aba do navegador (não no embed do Notion) e verifique a conexão.',err_not_allowed:'Ative o método E-mail/Senha no Firebase (Authentication → Sign-in method).',err_too_many:'Muitas tentativas. Aguarde alguns minutos e tente de novo.',err_generic:'Erro ao entrar.',watch_login:'Não foi possível concluir o login. Se estiver no embed do Notion, ou com bloqueio de cookies de terceiros / proteção de rastreamento ativa, abra o site em uma aba normal do navegador (ex.: Chrome) e tente de novo.',firebase_not_config:'Firebase não configurado.'},
+    en:{brand_sub:'Your hours on any device',logout:'Log out',login_sub:'Sign in to access your hours on any device.',email:'Email',password:'Password',ph_password:'At least 6 characters',login_btn:'Sign in',signup_btn:'Create account',nav_home:'🏠 Home',nav_calendar:'📅 Calendar',nav_closures:'🧾 Closures',nav_settings:'⚙️ Settings',nav_add:'＋ Add day',filter_label:'Filter:',all_months:'All months',custom_period:'Custom period',until:'to',card_balance:'Balance',card_worked_today:'Worked today',card_expected_today:'Expected today',records:'Records',th_date:'Date',th_day:'Day',th_in1:'In 1',th_out1:'Out 1',th_in2:'In 2',th_out2:'Out 2',th_worked:'Worked',th_expected:'Expected',th_balance:'Balance',th_obs:'Notes',no_records_period:'No records in this period.',cal_prev:'Previous month',cal_next:'Next month',cf_all:'All',cf_pos:'Positive',cf_neg:'Negative',cf_none:'No record',dow0:'Sun',dow1:'Mon',dow2:'Tue',dow3:'Wed',dow4:'Thu',dow5:'Fri',dow6:'Sat',legend_pos:'Positive balance',legend_neg:'Negative balance',legend_none:'No record',cal_hint:'Tap a day to see the logged times or add a new day.',s_account:'Account',s_reset_pw:'Reset password',s_logout:'Log out',s_journey:'Work schedule',s_journey_hint:'Set how many hours are expected for each day of the week.',s_save_journey:'Save schedule',s_site:'Site',s_address:'Address',s_open_site:'Open site ↗',s_current_journey:'Current schedule',s_holiday_hint:'A note with “holiday”, “day off”, “vacation” or “sick” counts as 0h expected for the day.',s_reports:'Reports',s_accum_balance:'Accumulated balance',s_export:'Export xlsx',s_import:'Import xlsx',s_language:'Language',s_language_hint:'Choose the interface language.',cl_title:'Closures',cl_sub:'View the periods in which you closed your hours',cl_new:'＋ New closure',cl_th_start:'Start date',cl_th_end:'End date',cl_th_count:'Total records',cl_th_worked:'Total worked',cl_th_balance:'Hours balance',cl_th_actions:'Actions',cl_empty:'No closures created yet. Create the first one with “New closure”.',cl_report_title:'Closure report',back:'← Back',cl_balance_period:'Period balance',cl_total_worked:'Total worked',cl_total_expected:'Total expected',cl_period_records:'Period records',vac_title:'Vacation',vac_sub:'Register and track your vacation periods',vac_new:'＋ New vacation period',vac_th_start:'Start date',vac_th_end:'End date',vac_th_days:'Days',vac_th_note:'Note',vac_th_actions:'Actions',vac_empty:'No vacation periods yet. Create the first one with “New vacation period”.',vac_modal_new:'New vacation period',vac_modal_edit:'Edit vacation period',vac_days_label:'Total days',vac_save:'Save vacation',vac_note_ph:'E.g.: Annual leave',m_add_day:'Add day',close:'Close',f_date:'Date',in1:'Clock in 1',out1:'Clock out 1',in2:'Clock in 2',out2:'Clock out 2',notes:'Notes',ph_note:'E.g.: Holiday',add_update:'Add / Update',form_hint:'The expected schedule follows what you set in Settings. A note with “holiday”, “day off”, “vacation” or “sick” counts as 0h expected. Existing dates are updated.',detail_title:'Day details',worked:'Worked',expected:'Expected',balance:'Balance',save_changes:'Save changes',delete:'Delete',cl_modal_new:'New closure',cl_modal_edit:'Edit closure',cl_start:'Start date',cl_end:'End date',cl_regs:'Records',cl_worked:'Worked',cl_save:'Save closure',bn_home:'Home',bn_calendar:'Calendar',bn_closures:'Closures',bn_settings:'Settings',view:'View',edit:'Edit',scope_total:'{n} record(s) total',scope_month:'{n} record(s) in {month}',scope_range:'{n} record(s) from {a} to {b}',scope_choose:'Choose the period dates',range_start:'start',range_end:'today',bal_accum:'Accumulated balance',bal_period:'Period balance',bal_month:'Month balance',no_mark:'No entries',days_pos:'Days with positive balance',days_neg:'Days with negative balance',days_none:'Days without record',no_days_cond:'No day in this condition this month.',tap_register:'Tap to log the times',register:'Log',report_range:'{a} to {b} · {n} record(s)',report_info:'{n} record(s) · {tw} worked · {te} expected.',reg_abbrev:'rec.',worked_abbrev:'Wkd.',expected_abbrev:'Exp.',detail_day:'Day {d}',confirm_del_closure:'Delete this closure?',confirm_del_vac:'Delete this vacation period?',msg_creating:'Creating account…',msg_signing_in:'Signing in…',msg_journey_saved:'Schedule saved.',msg_closure_saved:'Closure saved.',msg_vac_saved:'Vacation period saved.',msg_record_saved:'Record saved.',msg_changes_saved:'Changes saved.',msg_pick_date:'Choose a date.',msg_choose_dates:'Choose the start and end dates.',msg_start_before_end:'The start date must be before the end date.',msg_fill_email_pw:'Enter email and password.',msg_pw_min:'The password must be at least 6 characters.',msg_no_server:'Could not connect to the server. Check your internet, disable blockers and reload the page.',alert_reset:'We sent an email to reset your password.',alert_reset_err:'Error: ',msg_import_ok:'{n} record(s) imported.',msg_import_err:'Import error: ',days_count:'{n} day(s)',err_invalid_email:'Invalid email.',err_user_not_found:'Account not found. Use “Create account” first.',err_wrong_password:'Wrong password.',err_invalid_credential:'Wrong email or password.',err_email_in_use:'This email already has an account. Use “Sign in”.',err_weak_password:'The password must be at least 6 characters.',err_network:'Network error. Open the site in a browser tab (not the Notion embed) and check your connection.',err_not_allowed:'Enable the Email/Password method in Firebase (Authentication → Sign-in method).',err_too_many:'Too many attempts. Wait a few minutes and try again.',err_generic:'Sign-in error.',watch_login:'Could not complete sign-in. If you are in the Notion embed, or with third-party cookie blocking / tracking protection on, open the site in a normal browser tab (e.g. Chrome) and try again.',firebase_not_config:'Firebase not configured.'},
+    es:{brand_sub:'Tus horas en cualquier dispositivo',logout:'Salir',login_sub:'Inicia sesión para acceder a tus horas en cualquier dispositivo.',email:'Correo',password:'Contraseña',ph_password:'Mínimo 6 caracteres',login_btn:'Entrar',signup_btn:'Crear cuenta',nav_home:'🏠 Inicio',nav_calendar:'📅 Calendario',nav_closures:'🧾 Cierres',nav_settings:'⚙️ Configuración',nav_add:'＋ Registrar día',filter_label:'Filtrar:',all_months:'Todos los meses',custom_period:'Período personalizado',until:'hasta',card_balance:'Saldo',card_worked_today:'Trabajado hoy',card_expected_today:'Previsto hoy',records:'Registros',th_date:'Fecha',th_day:'Día',th_in1:'Ent 1',th_out1:'Sal 1',th_in2:'Ent 2',th_out2:'Sal 2',th_worked:'Trabajadas',th_expected:'Previstas',th_balance:'Saldo',th_obs:'Obs.',no_records_period:'Sin registros en este período.',cal_prev:'Mes anterior',cal_next:'Mes siguiente',cf_all:'Todos',cf_pos:'Positivo',cf_neg:'Negativo',cf_none:'Sin registro',dow0:'Dom',dow1:'Lun',dow2:'Mar',dow3:'Mié',dow4:'Jue',dow5:'Vie',dow6:'Sáb',legend_pos:'Saldo positivo',legend_neg:'Saldo negativo',legend_none:'Sin registro',cal_hint:'Toca un día para ver los horarios marcados o registrar un nuevo día.',s_account:'Cuenta',s_reset_pw:'Restablecer contraseña',s_logout:'Cerrar sesión',s_journey:'Jornada de trabajo',s_journey_hint:'Define cuántas horas se prevén para cada día de la semana.',s_save_journey:'Guardar jornada',s_site:'Sitio',s_address:'Dirección',s_open_site:'Abrir sitio ↗',s_current_journey:'Jornada actual',s_holiday_hint:'Una nota con “feriado”, “descanso”, “vacaciones” o “baja” cuenta como 0h previstas en el día.',s_reports:'Informes',s_accum_balance:'Saldo acumulado',s_export:'Exportar xlsx',s_import:'Importar xlsx',s_language:'Idioma',s_language_hint:'Elige el idioma de la interfaz.',cl_title:'Cierres',cl_sub:'Consulta los períodos en los que cerraste tus horas',cl_new:'＋ Nuevo cierre',cl_th_start:'Fecha inicial',cl_th_end:'Fecha final',cl_th_count:'Total de registros',cl_th_worked:'Total trabajado',cl_th_balance:'Saldo de horas',cl_th_actions:'Acciones',cl_empty:'Aún no hay cierres. Crea el primero con “Nuevo cierre”.',cl_report_title:'Informe del cierre',back:'← Volver',cl_balance_period:'Saldo del período',cl_total_worked:'Total trabajado',cl_total_expected:'Total previsto',cl_period_records:'Registros del período',vac_title:'Vacaciones',vac_sub:'Registra y controla tus períodos de vacaciones',vac_new:'＋ Nuevo período de vacaciones',vac_th_start:'Fecha inicial',vac_th_end:'Fecha final',vac_th_days:'Días',vac_th_note:'Nota',vac_th_actions:'Acciones',vac_empty:'No hay períodos de vacaciones. Crea el primero con “Nuevo período de vacaciones”.',vac_modal_new:'Nuevo período de vacaciones',vac_modal_edit:'Editar período de vacaciones',vac_days_label:'Total de días',vac_save:'Guardar vacaciones',vac_note_ph:'Ej.: Vacaciones anuales',m_add_day:'Registrar día',close:'Cerrar',f_date:'Fecha',in1:'Entrada 1',out1:'Salida 1',in2:'Entrada 2',out2:'Salida 2',notes:'Notas',ph_note:'Ej.: Feriado',add_update:'Añadir / Actualizar',form_hint:'La jornada prevista sigue lo que definiste en Configuración. Una nota con “feriado”, “descanso”, “vacaciones” o “baja” cuenta como 0h previstas. Una fecha existente se actualiza.',detail_title:'Detalles del día',worked:'Trabajadas',expected:'Previstas',balance:'Saldo',save_changes:'Guardar cambios',delete:'Eliminar',cl_modal_new:'Nuevo cierre',cl_modal_edit:'Editar cierre',cl_start:'Fecha inicial',cl_end:'Fecha final',cl_regs:'Registros',cl_worked:'Trabajado',cl_save:'Guardar cierre',bn_home:'Inicio',bn_calendar:'Calendario',bn_closures:'Cierres',bn_settings:'Config.',view:'Ver',edit:'Editar',scope_total:'{n} registro(s) en total',scope_month:'{n} registro(s) en {month}',scope_range:'{n} registro(s) de {a} hasta {b}',scope_choose:'Elige las fechas del período',range_start:'inicio',range_end:'hoy',bal_accum:'Saldo acumulado',bal_period:'Saldo del período',bal_month:'Saldo del mes',no_mark:'Sin marcación',days_pos:'Días con saldo positivo',days_neg:'Días con saldo negativo',days_none:'Días sin registro',no_days_cond:'Ningún día en esta condición este mes.',tap_register:'Toca para registrar los horarios',register:'Registrar',report_range:'{a} hasta {b} · {n} registro(s)',report_info:'{n} registro(s) · {tw} trabajadas · {te} previstas.',reg_abbrev:'reg.',worked_abbrev:'Trab.',expected_abbrev:'Prev.',detail_day:'Día {d}',confirm_del_closure:'¿Eliminar este cierre?',confirm_del_vac:'¿Eliminar este período de vacaciones?',msg_creating:'Creando cuenta…',msg_signing_in:'Entrando…',msg_journey_saved:'Jornada guardada.',msg_closure_saved:'Cierre guardado.',msg_vac_saved:'Período de vacaciones guardado.',msg_record_saved:'Registro guardado.',msg_changes_saved:'Cambios guardados.',msg_pick_date:'Elige una fecha.',msg_choose_dates:'Elige las fechas inicial y final.',msg_start_before_end:'La fecha inicial debe ser anterior a la final.',msg_fill_email_pw:'Completa correo y contraseña.',msg_pw_min:'La contraseña debe tener al menos 6 caracteres.',msg_no_server:'No se pudo conectar al servidor. Revisa tu internet, desactiva bloqueadores y recarga la página.',alert_reset:'Enviamos un correo para restablecer tu contraseña.',alert_reset_err:'Error: ',msg_import_ok:'{n} registro(s) importado(s).',msg_import_err:'Error al importar: ',days_count:'{n} día(s)',err_invalid_email:'Correo inválido.',err_user_not_found:'Cuenta no encontrada. Usa “Crear cuenta” primero.',err_wrong_password:'Contraseña incorrecta.',err_invalid_credential:'Correo o contraseña incorrectos.',err_email_in_use:'Este correo ya tiene cuenta. Usa “Entrar”.',err_weak_password:'La contraseña debe tener al menos 6 caracteres.',err_network:'Fallo de red. Abre el sitio en una pestaña del navegador (no en el embed de Notion) y revisa la conexión.',err_not_allowed:'Activa el método Correo/Contraseña en Firebase (Authentication → Sign-in method).',err_too_many:'Demasiados intentos. Espera unos minutos e inténtalo de nuevo.',err_generic:'Error al entrar.',watch_login:'No se pudo completar el inicio de sesión. Si estás en el embed de Notion, o con bloqueo de cookies de terceros / protección de rastreo activa, abre el sitio en una pestaña normal del navegador (ej.: Chrome) e inténtalo de nuevo.',firebase_not_config:'Firebase no configurado.'}
+  };
+  function t(k,vars){let s=(I18N[lang]&&I18N[lang][k]);if(s==null)s=I18N.pt[k];if(s==null)s=k;if(vars)for(const p in vars)s=s.split('{'+p+'}').join(vars[p]);return s;}
+  function applyI18n(){document.documentElement.lang=(lang==='pt'?'pt-BR':lang);document.querySelectorAll('[data-i18n]').forEach(el=>{el.textContent=t(el.getAttribute('data-i18n'));});document.querySelectorAll('[data-i18n-ph]').forEach(el=>{el.setAttribute('placeholder',t(el.getAttribute('data-i18n-ph')));});document.querySelectorAll('[data-i18n-aria]').forEach(el=>{el.setAttribute('aria-label',t(el.getAttribute('data-i18n-aria')));});}
+  function setLang(l){lang=l;try{localStorage.setItem('cp_lang',l);}catch(e){}applyLangArrays();applyI18n();try{render();}catch(e){}}
 
-  function showMsg(el,t,type){el.textContent=t;el.className='msg '+type;setTimeout(()=>{el.className='msg';},4000);}
+  function showMsg(el,txt,type){el.textContent=txt;el.className='msg '+type;setTimeout(()=>{el.className='msg';},4000);}
 
-  function isHoliday(obs){return /feriad|folga|férias|ferias|atestado/i.test(obs||'');}
+  function isHoliday(obs){return /feriad|folga|férias|ferias|atestado|holiday|day\s?off|vacation|sick|leave|festivo|vacaciones|descanso|baja/i.test(obs||'');}
   const DEFAULT_JOURNEY=[0,480,480,480,480,480,240];
   let journey=DEFAULT_JOURNEY.slice();
   function expectedByWeekday(dateStr){const wd=new Date(dateStr+'T00:00:00').getDay();const v=journey&&journey[wd];return (typeof v==='number'&&!isNaN(v))?v:DEFAULT_JOURNEY[wd];}
@@ -692,7 +756,7 @@
     return s.slice(0,10);
   }
 
-  let auth,db,records=[],closures=[];
+  let auth,db,records=[],closures=[],vacations=[];
   try{
     firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.firestore();
     // Em embeds (iframe), navegadores podem bloquear o armazenamento e o login
@@ -701,28 +765,18 @@
     auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
       .catch(()=>{try{auth.setPersistence(firebase.auth.Auth.Persistence.NONE);}catch(e){}});
   }
-  catch(e){showMsg(authMsg,'Firebase não configurado.','err');}
+  catch(e){showMsg(authMsg,t('firebase_not_config'),'err');}
 
   function friendlyErr(e){
     const c=(e&&e.code)||'';
-    const map={
-      'auth/invalid-email':'E-mail inválido.',
-      'auth/user-not-found':'Conta não encontrada. Use “Criar conta” primeiro.',
-      'auth/wrong-password':'Senha incorreta.',
-      'auth/invalid-credential':'E-mail ou senha incorretos.',
-      'auth/email-already-in-use':'Este e-mail já tem conta. Use “Entrar”.',
-      'auth/weak-password':'A senha precisa de pelo menos 6 caracteres.',
-      'auth/network-request-failed':'Falha de rede. Abra o site em uma aba do navegador (não no embed do Notion) e verifique a conexão.',
-      'auth/operation-not-allowed':'Ative o método E-mail/Senha no Firebase (Authentication → Sign-in method).',
-      'auth/too-many-requests':'Muitas tentativas. Aguarde alguns minutos e tente de novo.'
-    };
-    return map[c]||(e&&e.message)||'Erro ao entrar.';
+    const map={'auth/invalid-email':'err_invalid_email','auth/user-not-found':'err_user_not_found','auth/wrong-password':'err_wrong_password','auth/invalid-credential':'err_invalid_credential','auth/email-already-in-use':'err_email_in_use','auth/weak-password':'err_weak_password','auth/network-request-failed':'err_network','auth/operation-not-allowed':'err_not_allowed','auth/too-many-requests':'err_too_many'};
+    return (map[c]&&t(map[c]))||(e&&e.message)||t('err_generic');
   }
   function getCreds(){
     if(!auth){showMsg(authMsg,'Não foi possível conectar ao servidor. Verifique sua internet, desative bloqueadores e recarregue a página.','err');return null;}
     const em=$('email').value.trim(), pw=$('password').value;
-    if(!em||!pw){showMsg(authMsg,'Preencha e-mail e senha.','err');return null;}
-    if(pw.length<6){showMsg(authMsg,'A senha precisa de pelo menos 6 caracteres.','err');return null;}
+    if(!em||!pw){showMsg(authMsg,t('msg_fill_email_pw'),'err');return null;}
+    if(pw.length<6){showMsg(authMsg,t('msg_pw_min'),'err');return null;}
     return {em,pw};
   }
   let authWatch=null;
@@ -731,16 +785,16 @@
     clearAuthWatch();
     authWatch=setTimeout(()=>{
       if(auth&&!auth.currentUser){
-        showMsg(authMsg,'Não foi possível concluir o login. Se estiver no embed do Notion, ou com bloqueio de cookies de terceiros / proteção de rastreamento ativa, abra o site em uma aba normal do navegador (ex.: Chrome) e tente de novo.','err');
+        showMsg(authMsg,t('watch_login'),'err');
       }
     },9000);
   }
-  $('signupBtn').onclick=()=>{const c=getCreds();if(!c)return;showMsg(authMsg,'Criando conta…','ok');startAuthWatch();auth.createUserWithEmailAndPassword(c.em,c.pw).catch(e=>{clearAuthWatch();showMsg(authMsg,friendlyErr(e),'err');});};
-  $('loginBtn').onclick=()=>{const c=getCreds();if(!c)return;showMsg(authMsg,'Entrando…','ok');startAuthWatch();auth.signInWithEmailAndPassword(c.em,c.pw).catch(e=>{clearAuthWatch();showMsg(authMsg,friendlyErr(e),'err');});};
+  $('signupBtn').onclick=()=>{const c=getCreds();if(!c)return;showMsg(authMsg,t('msg_creating'),'ok');startAuthWatch();auth.createUserWithEmailAndPassword(c.em,c.pw).catch(e=>{clearAuthWatch();showMsg(authMsg,friendlyErr(e),'err');});};
+  $('loginBtn').onclick=()=>{const c=getCreds();if(!c)return;showMsg(authMsg,t('msg_signing_in'),'ok');startAuthWatch();auth.signInWithEmailAndPassword(c.em,c.pw).catch(e=>{clearAuthWatch();showMsg(authMsg,friendlyErr(e),'err');});};
   $('logoutBtn').onclick=()=>auth&&auth.signOut();
 
   function docRef(){return db.collection('userContent').doc(auth.currentUser.uid);}
-  function save(){return docRef().set({records,journey,closures,updated:Date.now()});}
+  function save(){return docRef().set({records,journey,closures,vacations,updated:Date.now()});}
 
   function recalc(r){
     r.workedMin=shiftMin(r.e1,r.s1)+shiftMin(r.e2,r.s2);
@@ -758,7 +812,7 @@
   function populateFilter(){
     const sel=$('filterMonth');const cur=sel.value;
     const months=[...new Set(records.map(r=>r.data.slice(0,7)))].sort().reverse();
-    sel.innerHTML='<option value="all">Todos os meses</option>'+months.map(m=>`<option value="${m}">${monthLabel(m)}</option>`).join('')+'<option value="custom">Período personalizado</option>';
+    sel.innerHTML='<option value="all">'+t('all_months')+'</option>'+months.map(m=>`<option value="${m}">${monthLabel(m)}</option>`).join('')+'<option value="custom">'+t('custom_period')+'</option>';
     if(cur&&(cur==='all'||cur==='custom'||months.includes(cur)))sel.value=cur;
   }
 
@@ -772,13 +826,13 @@
     if(f==='custom'){
       const s=$('fStart').value, e=$('fEnd').value;
       visible=records.filter(r=>(!s||r.data>=s)&&(!e||r.data<=e));
-      $('scopeLabel').textContent=(s||e)?`${visible.length} registro(s) de ${s?toBR(s):'início'} até ${e?toBR(e):'hoje'}`:'Escolha as datas do período';
+      $('scopeLabel').textContent=(s||e)?t('scope_range',{n:visible.length,a:s?toBR(s):t('range_start'),b:e?toBR(e):t('range_end')}):t('scope_choose');
     }else if(f==='all'){
       visible=records.slice();
-      $('scopeLabel').textContent=`${records.length} registro(s) no total`;
+      $('scopeLabel').textContent=t('scope_total',{n:records.length});
     }else{
       visible=records.filter(r=>r.data.slice(0,7)===f);
-      $('scopeLabel').textContent=`${visible.length} registro(s) em ${monthLabel(f)}`;
+      $('scopeLabel').textContent=t('scope_month',{n:visible.length,month:monthLabel(f)});
     }
     const tb=$('rows');tb.innerHTML='';const cl=$('cardList');cl.innerHTML='';let tw=0,te=0;
     visible.forEach(r=>{
@@ -790,15 +844,15 @@
         `<td>${fmt(r.workedMin)}</td><td>${fmt(r.expectedMin)}</td>`+
         `<td class="${bal>=0?'pos':'neg'}">${fmtSigned(bal)}</td>`+
         `<td>${r.obs?`<span class="tag">${r.obs}</span>`:''}</td>`+
-        `<td><button class="del" data-d="${r.data}">Excluir</button></td>`;
+        `<td><button class="del" data-d="${r.data}">${t('delete')}</button></td>`;
       tr.addEventListener('click',()=>openDetail(r.data));
       tb.appendChild(tr);
-      const shifts=[[r.e1,r.s1],[r.e2,r.s2]].filter(p=>p[0]||p[1]).map(p=>`${p[0]||'—'}–${p[1]||'—'}`).join('   ·   ')||'Sem marcação';
+      const shifts=[[r.e1,r.s1],[r.e2,r.s2]].filter(p=>p[0]||p[1]).map(p=>`${p[0]||'—'}–${p[1]||'—'}`).join('   ·   ')||t('no_mark');
       const card=document.createElement('div');
       card.className='rec-card';
       card.innerHTML=`<div class="rc-top"><div class="rc-day"><span class="rc-wd">${wd}</span><span class="rc-date">${toBR(r.data)}</span></div><span class="rc-bal ${bal>=0?'pos':'neg'}">${fmtSigned(bal)}</span></div>`+
         `<div class="rc-times">${shifts}</div>`+
-        `<div class="rc-foot"><span class="rc-chip">Trab. <b>${fmt(r.workedMin)}</b></span><span class="rc-chip">Prev. <b>${fmt(r.expectedMin)}</b></span>${r.obs?`<span class="tag">${r.obs}</span>`:''}</div>`;
+        `<div class="rc-foot"><span class="rc-chip">${t('worked_abbrev')} <b>${fmt(r.workedMin)}</b></span><span class="rc-chip">${t('expected_abbrev')} <b>${fmt(r.expectedMin)}</b></span>${r.obs?`<span class="tag">${r.obs}</span>`:''}</div>`;
       card.addEventListener('click',()=>openDetail(r.data));
       cl.appendChild(card);
     });
@@ -810,11 +864,11 @@
     $('totExpected').textContent=fmt(todayRec?todayRec.expectedMin:expectedByWeekday(todayISO));
     const bal=tw-te;$('totBalance').textContent=fmtSigned(bal);
     $('balanceCard').className='stat '+(bal>=0?'pos':'neg');
-    $('balanceCard').querySelector('.k').textContent=(f==='all')?'Saldo acumulado':(f==='custom'?'Saldo do período':'Saldo do mês');
+    $('balanceCard').querySelector('.k').textContent=(f==='all')?t('bal_accum'):(f==='custom'?t('bal_period'):t('bal_month'));
     document.querySelectorAll('.del').forEach(b=>b.onclick=(e)=>{e.stopPropagation();records=records.filter(x=>x.data!==b.dataset.d);save();render();});
     if(!$('viewCalendar').classList.contains('hidden'))renderCalendar();
     if(!$('viewSettings').classList.contains('hidden'))renderSettings();
-    if(!$('viewClosures').classList.contains('hidden')){renderClosures();if(!$('closureReport').classList.contains('hidden'))renderClosureReport();}
+    if(!$('viewClosures').classList.contains('hidden')){renderClosures();renderVacations();if(!$('closureReport').classList.contains('hidden'))renderClosureReport();}
   }
   $('filterMonth').onchange=render;
   $('fStart').addEventListener('change',render);
@@ -831,7 +885,7 @@
     document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active', b.dataset.nav===name));
     if(name==='calendar')renderCalendar();
     if(name==='settings')renderSettings();
-    if(name==='closures')renderClosures();
+    if(name==='closures'){renderClosures();renderVacations();}
     window.scrollTo(0,0);
   }
   document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.nav)));
@@ -881,14 +935,14 @@
       if(kind!==calFilter)continue;
       items.push({ds,r,kind});
     }
-    const labels={pos:'Dias com saldo positivo',neg:'Dias com saldo negativo',none:'Dias sem registro'};
+    const labels={pos:t('days_pos'),neg:t('days_neg'),none:t('days_none')};
     listEl.innerHTML=`<div class="cal-list-title">${labels[calFilter]} · ${items.length}</div>`;
-    if(!items.length){const em=document.createElement('div');em.className='empty';em.textContent='Nenhum dia nesta condição neste mês.';listEl.appendChild(em);}
+    if(!items.length){const em=document.createElement('div');em.className='empty';em.textContent=t('no_days_cond');listEl.appendChild(em);}
     items.forEach(({ds,r,kind})=>{
       const wd=WEEKDAYS_FULL[new Date(ds+'T00:00:00').getDay()];
       const row=document.createElement('div');row.className='cl-day';
-      const sub=r?(([[r.e1,r.s1],[r.e2,r.s2]].filter(p=>p[0]||p[1]).map(p=>`${p[0]||'—'}–${p[1]||'—'}`).join('  ·  ')||'Sem marcação')+(r.obs?' · '+r.obs:'')):'Toque para registrar os horários';
-      const bal=r?`<span class="cld-bal ${kind}">${fmtSigned(r.balanceMin)}</span>`:'<span class="cld-bal none">Registrar</span>';
+      const sub=r?(([[r.e1,r.s1],[r.e2,r.s2]].filter(p=>p[0]||p[1]).map(p=>`${p[0]||'—'}–${p[1]||'—'}`).join('  ·  ')||t('no_mark'))+(r.obs?' · '+r.obs:'')):t('tap_register');
+      const bal=r?`<span class="cld-bal ${kind}">${fmtSigned(r.balanceMin)}</span>`:`<span class="cld-bal none">${t('register')}</span>`;
       row.innerHTML=`<span class="cld-left"><span class="cld-date">${toBR(ds)} · ${wd}</span><span class="cld-sub">${sub}</span></span>${bal}`;
       row.addEventListener('click',()=>openDay(ds));
       listEl.appendChild(row);
@@ -905,7 +959,7 @@
 
   // ---- Configurações ----
   function fmtJ(v){const hh=Math.floor(v/60),mm=v%60;return mm?hh+'h'+String(mm).padStart(2,'0'):hh+'h';}
-  function journeyText(){const wk=journey[1];const allWk=[1,2,3,4,5].every(i=>journey[i]===wk);const p=[];p.push(allWk?('Seg–Sex '+fmtJ(wk)):(WEEKDAYS.slice(1,6).map((n,i)=>n+' '+fmtJ(journey[i+1])).join(' · ')));p.push('Sáb '+fmtJ(journey[6]));p.push('Dom '+fmtJ(journey[0]));return p.join(' · ');}
+  function journeyText(){const wk=journey[1];const allWk=[1,2,3,4,5].every(i=>journey[i]===wk);const p=[];p.push(allWk?(WEEKDAYS[1]+'–'+WEEKDAYS[5]+' '+fmtJ(wk)):([1,2,3,4,5].map(i=>WEEKDAYS[i]+' '+fmtJ(journey[i])).join(' · ')));p.push(WEEKDAYS[6]+' '+fmtJ(journey[6]));p.push(WEEKDAYS[0]+' '+fmtJ(journey[0]));return p.join(' · ');}
   function buildJourneyGrid(){const order=[1,2,3,4,5,6,0];$('journeyGrid').innerHTML=order.map(i=>`<div class="jr-day"><span>${WEEKDAYS[i]}</span><input type="number" min="0" max="24" step="0.5" data-wd="${i}" value="${journey[i]/60}"></div>`).join('');}
   function renderSettings(){
     if(auth&&auth.currentUser)$('setEmail').textContent=auth.currentUser.email;
@@ -914,13 +968,13 @@
     let tw=0,te=0;records.forEach(r=>{recalc(r);tw+=r.workedMin;te+=r.expectedMin;});
     $('setBalance').textContent=fmtSigned(tw-te);
     $('setBalance').style.color=(tw-te)>=0?'var(--green)':'var(--red)';
-    $('setReportInfo').textContent=records.length+' registro(s) · '+fmt(tw)+' trabalhadas · '+fmt(te)+' previstas.';
+    $('setReportInfo').textContent=t('report_info',{n:records.length,tw:fmt(tw),te:fmt(te)});if($('langSelect'))$('langSelect').value=lang;
   }
   $('saveJourney').onclick=()=>{
     const nj=journey.slice();
     document.querySelectorAll('#journeyGrid input').forEach(inp=>{let h=parseFloat(inp.value);if(isNaN(h)||h<0)h=0;if(h>24)h=24;nj[Number(inp.dataset.wd)]=Math.round(h*60);});
     journey=nj;records.forEach(recalc);
-    save().then(()=>{showMsg($('journeyMsg'),'Jornada salva.','ok');render();$('journeySummary').textContent=journeyText();}).catch(e=>showMsg($('journeyMsg'),e.message,'err'));
+    save().then(()=>{showMsg($('journeyMsg'),t('msg_journey_saved'),'ok');render();$('journeySummary').textContent=journeyText();}).catch(e=>showMsg($('journeyMsg'),e.message,'err'));
   };
 
   // ---- Fechamentos ----
@@ -937,12 +991,12 @@
       const tr=document.createElement('tr');
       tr.innerHTML=`<td>${c.start?toBR(c.start):'—'}</td><td>${c.end?toBR(c.end):'—'}</td><td>${s.count}</td><td>${fmtHM(s.worked)}</td>`+
         `<td class="${s.balance>=0?'pos':'neg'}">${fmtSaldoHM(s.balance)}</td>`+
-        `<td><span class="cl-actions"><button class="btn sm" data-view-cl="${c.id}">Visualizar</button><button class="btn secondary sm" data-edit-cl="${c.id}">Editar</button><button class="btn danger sm" data-del-cl="${c.id}">Excluir</button></span></td>`;
+        `<td><span class="cl-actions"><button class="btn sm" data-view-cl="${c.id}">${t('view')}</button><button class="btn secondary sm" data-edit-cl="${c.id}">${t('edit')}</button><button class="btn danger sm" data-del-cl="${c.id}">${t('delete')}</button></span></td>`;
       tb.appendChild(tr);
       const card=document.createElement('div');card.className='cl-card';
       card.innerHTML=`<div class="cc-top"><span class="cc-range">${c.start?toBR(c.start):'—'} → ${c.end?toBR(c.end):'—'}</span><span class="cc-bal ${s.balance>=0?'pos':'neg'}">${fmtSaldoHM(s.balance)}</span></div>`+
-        `<div class="cc-meta"><span class="rc-chip">${s.count} reg.</span><span class="rc-chip">Trab. <b>${fmtHM(s.worked)}</b></span></div>`+
-        `<div class="cc-actions"><button class="btn sm" data-view-cl="${c.id}">Visualizar</button><button class="btn secondary sm" data-edit-cl="${c.id}">Editar</button><button class="btn danger sm" data-del-cl="${c.id}">Excluir</button></div>`;
+        `<div class="cc-meta"><span class="rc-chip">${s.count} ${t('reg_abbrev')}</span><span class="rc-chip">${t('worked_abbrev')} <b>${fmtHM(s.worked)}</b></span></div>`+
+        `<div class="cc-actions"><button class="btn sm" data-view-cl="${c.id}">${t('view')}</button><button class="btn secondary sm" data-edit-cl="${c.id}">${t('edit')}</button><button class="btn danger sm" data-del-cl="${c.id}">${t('delete')}</button></div>`;
       cc.appendChild(card);
     });
     $('closureEmpty').classList.toggle('hidden',list.length>0);
@@ -951,8 +1005,8 @@
     document.querySelectorAll('[data-del-cl]').forEach(b=>b.onclick=()=>delClosure(b.dataset.delCl));
   }
   let closureKey=null;
-  function openClosure(){closureKey=null;$('closureModalTitle').textContent='Novo fechamento';$('clStart').value='';$('clEnd').value='';updateClosurePreview();$('closureBackdrop').classList.add('open');}
-  function editClosure(id){const c=closures.find(x=>String(x.id)===String(id));if(!c)return;closureKey=c.id;$('closureModalTitle').textContent='Editar fechamento';$('clStart').value=c.start||'';$('clEnd').value=c.end||'';updateClosurePreview();$('closureBackdrop').classList.add('open');}
+  function openClosure(){closureKey=null;$('closureModalTitle').textContent=t('cl_modal_new');$('clStart').value='';$('clEnd').value='';updateClosurePreview();$('closureBackdrop').classList.add('open');}
+  function editClosure(id){const c=closures.find(x=>String(x.id)===String(id));if(!c)return;closureKey=c.id;$('closureModalTitle').textContent=t('cl_modal_edit');$('clStart').value=c.start||'';$('clEnd').value=c.end||'';updateClosurePreview();$('closureBackdrop').classList.add('open');}
   function closeClosure(){$('closureBackdrop').classList.remove('open');closureKey=null;}
   function updateClosurePreview(){const s=closureStats({start:$('clStart').value,end:$('clEnd').value});$('clRegs').textContent=s.count;$('clWorked').textContent=fmtHM(s.worked);$('clBalance').textContent=fmtSaldoHM(s.balance);$('clBalance').style.color=s.balance>=0?'var(--green)':'var(--red)';}
   ['clStart','clEnd'].forEach(id=>$(id).addEventListener('change',updateClosurePreview));
@@ -961,46 +1015,81 @@
   $('closureBackdrop').addEventListener('click',e=>{if(e.target===$('closureBackdrop'))closeClosure();});
   $('clSave').onclick=()=>{
     const start=$('clStart').value,end=$('clEnd').value;
-    if(!start||!end){showMsg($('closureMsg'),'Escolha as datas inicial e final.','err');return;}
-    if(start>end){showMsg($('closureMsg'),'A data inicial deve ser antes da final.','err');return;}
+    if(!start||!end){showMsg($('closureMsg'),t('msg_choose_dates'),'err');return;}
+    if(start>end){showMsg($('closureMsg'),t('msg_start_before_end'),'err');return;}
     if(closureKey){const c=closures.find(x=>String(x.id)===String(closureKey));if(c){c.start=start;c.end=end;}}
     else{closures.push({id:Date.now(),start,end});}
-    save().then(()=>{showMsg($('closureMsg'),'Fechamento salvo.','ok');renderClosures();renderClosureReport();setTimeout(closeClosure,600);}).catch(e=>showMsg($('closureMsg'),e.message,'err'));
+    save().then(()=>{showMsg($('closureMsg'),t('msg_closure_saved'),'ok');renderClosures();renderClosureReport();setTimeout(closeClosure,600);}).catch(e=>showMsg($('closureMsg'),e.message,'err'));
   };
-  function delClosure(id){if(!confirm('Excluir este fechamento?'))return;if(String(viewingClosureId)===String(id))viewingClosureId=null;closures=closures.filter(x=>String(x.id)!==String(id));save().then(()=>{renderClosures();renderClosureReport();});}
+  function delClosure(id){if(!confirm(t('confirm_del_closure')))return;if(String(viewingClosureId)===String(id))viewingClosureId=null;closures=closures.filter(x=>String(x.id)!==String(id));save().then(()=>{renderClosures();renderClosureReport();});}
   let viewingClosureId=null;
   function renderClosureReport(){
     if(viewingClosureId==null){$('closureReport').classList.add('hidden');return;}
     const c=closures.find(x=>String(x.id)===String(viewingClosureId));
     if(!c){viewingClosureId=null;$('closureReport').classList.add('hidden');return;}
     const s=closureStats(c);
-    $('crRange').textContent=(c.start?toBR(c.start):'—')+' até '+(c.end?toBR(c.end):'—')+' · '+s.count+' registro(s)';
+    $('crRange').textContent=t('report_range',{a:(c.start?toBR(c.start):'—'),b:(c.end?toBR(c.end):'—'),n:s.count});
     $('crBal').textContent=fmtSigned(s.balance);
     $('crBalCard').className='stat '+(s.balance>=0?'pos':'neg');
     $('crWorked').textContent=fmt(s.worked);
     $('crExpected').textContent=fmt(s.expected);
     const inRange=records.filter(r=>(!c.start||r.data>=c.start)&&(!c.end||r.data<=c.end)).slice().sort((a,b)=>a.data<b.data?1:-1);
     const el=$('crList');el.innerHTML='';
-    inRange.forEach(r=>{recalc(r);const wd=WEEKDAYS_FULL[new Date(r.data+'T00:00:00').getDay()];const sub=([[r.e1,r.s1],[r.e2,r.s2]].filter(p=>p[0]||p[1]).map(p=>`${p[0]||'—'}–${p[1]||'—'}`).join('  ·  ')||'Sem marcação')+(r.obs?' · '+r.obs:'');const row=document.createElement('div');row.className='cl-day';row.innerHTML=`<span class="cld-left"><span class="cld-date">${toBR(r.data)} · ${wd}</span><span class="cld-sub">${sub}</span></span><span class="cld-bal ${r.balanceMin>=0?'pos':'neg'}">${fmtSigned(r.balanceMin)}</span>`;row.addEventListener('click',()=>openDetail(r.data));el.appendChild(row);});
+    inRange.forEach(r=>{recalc(r);const wd=WEEKDAYS_FULL[new Date(r.data+'T00:00:00').getDay()];const sub=([[r.e1,r.s1],[r.e2,r.s2]].filter(p=>p[0]||p[1]).map(p=>`${p[0]||'—'}–${p[1]||'—'}`).join('  ·  ')||t('no_mark'))+(r.obs?' · '+r.obs:'');const row=document.createElement('div');row.className='cl-day';row.innerHTML=`<span class="cld-left"><span class="cld-date">${toBR(r.data)} · ${wd}</span><span class="cld-sub">${sub}</span></span><span class="cld-bal ${r.balanceMin>=0?'pos':'neg'}">${fmtSigned(r.balanceMin)}</span>`;row.addEventListener('click',()=>openDetail(r.data));el.appendChild(row);});
     $('crEmpty').classList.toggle('hidden',inRange.length>0);
   }
   function viewClosure(id){viewingClosureId=id;renderClosureReport();$('closureReport').classList.remove('hidden');$('closureReport').scrollIntoView({behavior:'smooth',block:'start'});}
   $('crBack').onclick=()=>{viewingClosureId=null;$('closureReport').classList.add('hidden');};
+
+  // ---- Férias ----
+  function vacDays(s,e){if(!s||!e)return 0;const a=new Date(s+'T00:00:00'),b=new Date(e+'T00:00:00');const d=Math.round((b-a)/86400000)+1;return d>0?d:0;}
+  function renderVacations(){
+    const list=vacations.slice().sort((a,b)=>(a.start||'')<(b.start||'')?1:-1);
+    const tb=$('vacRows');if(!tb)return;tb.innerHTML='';const cc=$('vacCards');cc.innerHTML='';
+    list.forEach(v=>{const days=vacDays(v.start,v.end);
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${v.start?toBR(v.start):'—'}</td><td>${v.end?toBR(v.end):'—'}</td><td>${t('days_count',{n:days})}</td><td>${v.note?`<span class="tag">${v.note}</span>`:'—'}</td><td><span class="cl-actions"><button class="btn secondary sm" data-edit-vac="${v.id}">${t('edit')}</button><button class="btn danger sm" data-del-vac="${v.id}">${t('delete')}</button></span></td>`;
+      tb.appendChild(tr);
+      const card=document.createElement('div');card.className='cl-card';
+      card.innerHTML=`<div class="cc-top"><span class="cc-range">${v.start?toBR(v.start):'—'} → ${v.end?toBR(v.end):'—'}</span><span class="cc-bal pos">${t('days_count',{n:days})}</span></div>`+(v.note?`<div class="cc-meta"><span class="tag">${v.note}</span></div>`:'')+`<div class="cc-actions"><button class="btn secondary sm" data-edit-vac="${v.id}">${t('edit')}</button><button class="btn danger sm" data-del-vac="${v.id}">${t('delete')}</button></div>`;
+      cc.appendChild(card);
+    });
+    $('vacEmpty').classList.toggle('hidden',list.length>0);
+    document.querySelectorAll('[data-edit-vac]').forEach(b=>b.onclick=()=>editVac(b.dataset.editVac));
+    document.querySelectorAll('[data-del-vac]').forEach(b=>b.onclick=()=>delVac(b.dataset.delVac));
+  }
+  let vacKey=null;
+  function updateVacPreview(){$('vacDaysPrev').textContent=t('days_count',{n:vacDays($('vacStart').value,$('vacEnd').value)});}
+  function openVac(){vacKey=null;$('vacModalTitle').textContent=t('vac_modal_new');$('vacStart').value='';$('vacEnd').value='';$('vacNote').value='';$('vacMsg').textContent='';updateVacPreview();$('vacBackdrop').classList.add('open');}
+  function editVac(id){const v=vacations.find(x=>String(x.id)===String(id));if(!v)return;vacKey=v.id;$('vacModalTitle').textContent=t('vac_modal_edit');$('vacStart').value=v.start||'';$('vacEnd').value=v.end||'';$('vacNote').value=v.note||'';$('vacMsg').textContent='';updateVacPreview();$('vacBackdrop').classList.add('open');}
+  function closeVac(){$('vacBackdrop').classList.remove('open');vacKey=null;}
+  function delVac(id){if(!confirm(t('confirm_del_vac')))return;vacations=vacations.filter(x=>String(x.id)!==String(id));save().then(renderVacations);}
+  $('newVacBtn').onclick=openVac;
+  $('vacClose').onclick=closeVac;
+  $('vacBackdrop').addEventListener('click',e=>{if(e.target===$('vacBackdrop'))closeVac();});
+  ['vacStart','vacEnd'].forEach(id=>$(id).addEventListener('change',updateVacPreview));
+  $('vacSave').onclick=()=>{const start=$('vacStart').value,end=$('vacEnd').value,note=$('vacNote').value.trim();
+    if(!start||!end){showMsg($('vacMsg'),t('msg_choose_dates'),'err');return;}
+    if(start>end){showMsg($('vacMsg'),t('msg_start_before_end'),'err');return;}
+    if(vacKey){const v=vacations.find(x=>String(x.id)===String(vacKey));if(v){v.start=start;v.end=end;v.note=note;}}else{vacations.push({id:Date.now(),start,end,note});}
+    save().then(()=>{showMsg($('vacMsg'),t('msg_vac_saved'),'ok');renderVacations();setTimeout(closeVac,600);}).catch(e=>showMsg($('vacMsg'),e.message,'err'));};
+  if($('langSelect')){$('langSelect').value=lang;$('langSelect').onchange=e=>setLang(e.target.value);}
+  applyI18n();
   $('setResetPw').onclick=()=>{
     if(!auth||!auth.currentUser)return;
     auth.sendPasswordResetEmail(auth.currentUser.email)
-      .then(()=>alert('Enviamos um e-mail para redefinir sua senha.'))
-      .catch(e=>alert('Erro: '+friendlyErr(e)));
+      .then(()=>alert(t('alert_reset')))
+      .catch(e=>alert(t('alert_reset_err')+friendlyErr(e)));
   };
   $('setLogout').onclick=()=>auth&&auth.signOut();
 
   $('addBtn').onclick=()=>{
     const data=$('fData').value;
-    if(!data){showMsg(appMsg,'Escolha uma data.','err');return;}
+    if(!data){showMsg(appMsg,t('msg_pick_date'),'err');return;}
     const rec=recalc({data,e1:$('fE1').value,s1:$('fS1').value,e2:$('fE2').value,s2:$('fS2').value,obs:$('fObs').value.trim()});
     const i=records.findIndex(x=>x.data===data);
     if(i>=0)records[i]=rec;else records.push(rec);
-    save().then(()=>{showMsg(appMsg,'Registro salvo.','ok');render();setTimeout(closeSheet,600);}).catch(e=>showMsg(appMsg,e.message,'err'));
+    save().then(()=>{showMsg(appMsg,t('msg_record_saved'),'ok');render();setTimeout(closeSheet,600);}).catch(e=>showMsg(appMsg,e.message,'err'));
   };
 
   $('exportBtn').onclick=()=>{
@@ -1039,8 +1128,8 @@
           if(i>=0)records[i]=rec;else records.push(rec);
           count++;
         });
-        save().then(()=>{showMsg(appMsg,count+' registro(s) importado(s).','ok');render();});
-      }catch(err){showMsg(appMsg,'Erro ao importar: '+err.message,'err');}
+        save().then(()=>{showMsg(appMsg,t('msg_import_ok',{n:count}),'ok');render();});
+      }catch(err){showMsg(appMsg,t('msg_import_err')+err.message,'err');}
       $('importInput').value='';
     };
     reader.readAsArrayBuffer(file);
@@ -1052,7 +1141,7 @@
     const r=records.find(x=>x.data===dk); if(!r)return;
     detailKey=dk;
     const d=new Date(r.data+'T00:00:00');
-    $('detailTitle').textContent='Dia '+toBR(r.data);
+    $('detailTitle').textContent=t('detail_day',{d:toBR(r.data)});
     $('detailWeekday').textContent=WEEKDAYS_FULL[d.getDay()];
     $('dE1').value=r.e1||'';$('dS1').value=r.s1||'';$('dE2').value=r.e2||'';$('dS2').value=r.s2||'';$('dObs').value=r.obs||'';
     updateDetailPreview();
@@ -1073,7 +1162,7 @@
   $('dSave').onclick=()=>{
     if(!detailKey)return;const i=records.findIndex(x=>x.data===detailKey);if(i<0)return;
     records[i]=recalc({data:detailKey,e1:$('dE1').value,s1:$('dS1').value,e2:$('dE2').value,s2:$('dS2').value,obs:$('dObs').value.trim()});
-    save().then(()=>{showMsg($('detailMsg'),'Alterações salvas.','ok');render();setTimeout(closeDetail,600);}).catch(e=>showMsg($('detailMsg'),e.message,'err'));
+    save().then(()=>{showMsg($('detailMsg'),t('msg_changes_saved'),'ok');render();setTimeout(closeDetail,600);}).catch(e=>showMsg($('detailMsg'),e.message,'err'));
   };
   $('dDelete').onclick=()=>{
     if(!detailKey)return;records=records.filter(x=>x.data!==detailKey);
@@ -1087,7 +1176,7 @@
         authView.classList.add('hidden');appView.classList.remove('hidden');
         $('userEmail').textContent=user.email;
         if(!$('fData').value)$('fData').value=new Date().toISOString().slice(0,10);
-        docRef().get().then(d=>{const dt=d.exists?d.data():{};records=dt.records||[];journey=(Array.isArray(dt.journey)&&dt.journey.length===7)?dt.journey.slice():DEFAULT_JOURNEY.slice();closures=dt.closures||[];render();}).catch(()=>render());
+        docRef().get().then(d=>{const dt=d.exists?d.data():{};records=dt.records||[];journey=(Array.isArray(dt.journey)&&dt.journey.length===7)?dt.journey.slice():DEFAULT_JOURNEY.slice();closures=dt.closures||[];vacations=dt.vacations||[];applyI18n();render();}).catch(()=>render());
       }else{appView.classList.add('hidden');authView.classList.remove('hidden');}
     });
   }
