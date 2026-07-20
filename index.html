@@ -953,8 +953,9 @@
     window.scrollTo(0,0);
   }
   document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.nav)));
-  $('navAdd').onclick=openSheet;
-  $('bnAdd').onclick=openSheet;
+  function openNewSheet(){$('fData').value=todayLocalISO();$('fE1').value='';$('fS1').value='';$('fE2').value='';$('fS2').value='';$('fObs').value='';const m=$('appMsg');if(m){m.textContent='';m.className='msg';}openSheet();}
+  $('navAdd').onclick=openNewSheet;
+  $('bnAdd').onclick=openNewSheet;
 
   // ---- Calendário ----
   let calYM=null;
